@@ -194,7 +194,6 @@ build, flash, clean, ota, dfu, serial, init, config, setup, library"
   echo
 }
 
-
 build_firmware()
 {
 #Temporary fix for http://community.particle.io/t/stm32-usb-otg-driver-error-on-v0-6-0/26814
@@ -426,10 +425,8 @@ CWD="$(pwd)" # Global Current Working Directory variable
 
 # Mac OSX uses lowercase f for stty command
 
-    OS="Darwin"
-    STTYF="-f"
-    MODEM="$(ls -1 /dev/cu.* | grep -vi bluetooth | tail -1)"
-
+STTYF="-f"
+MODEM="$(ls -1 /dev/cu.* | grep -vi bluetooth | tail -1)"
 
 if [ "$1" == "config" ];
 then
@@ -469,8 +466,6 @@ then
     MESSAGE="Installing Particle firmware from Github..." ; blue_echo
     git clone https://github.com/spark/firmware.git
 
-  if [ "$OS" == "Darwin" ]; # Mac installation steps
-  then
     echo
     # Install ARM toolchain
     MESSAGE="Installing ARM toolchain..." ; blue_echo
@@ -509,15 +504,6 @@ then
     echo
     MESSAGE="Installing particle-cli..." ; blue_echo
     sudo npm install -g node-pre-gyp npm serialport particle-cli
-  fi # CLOSE: "$OS" == "Darwin"
-
-  cd "$BASE_FIRMWARE" || exit
-
-  if [ "$NOGIT" == "true" ];
-  then
-    MESSAGE="Installing Particle firmware from Github..." ; blue_echo
-    git clone https://github.com/spark/firmware.git
-  fi
 
   MESSAGE="
   Thank you for installing po-util. Be sure to check out https://po-util.com/
@@ -710,7 +696,6 @@ then
            echo
            git clone $i
           fi
-
 
           if [ -f "$FIRMWAREDIR/$LIB_NAME.cpp" ] || [ -f "$FIRMWAREDIR/$LIB_NAME.h" ];
           then
