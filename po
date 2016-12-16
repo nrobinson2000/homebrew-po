@@ -166,7 +166,7 @@ dfu_open()
     echo
     exit
   fi
-  stty "$STTYF" "$MODEM" "$DFUBAUDRATE" > /dev/null
+  stty -f "$MODEM" "$DFUBAUDRATE" > /dev/null
 }
 
 switch_branch()
@@ -423,9 +423,7 @@ DFUBAUDRATE=19200       # changed in the "~/.po" file.
 
 CWD="$(pwd)" # Global Current Working Directory variable
 
-# Mac OSX uses lowercase f for stty command
-
-STTYF="-f"
+# Get serial port
 MODEM="$(ls -1 /dev/cu.* | grep -vi bluetooth | tail -1)"
 
 if [ "$1" == "config" ];
