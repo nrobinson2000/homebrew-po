@@ -651,11 +651,8 @@ then
   MESSAGE="Updating particle-cli..." ; blue_echo
   sudo npm update -g particle-cli
   MESSAGE="Updating po-util.." ; blue_echo
-  rm ~/po-util.sh
-  curl -fsSLo ~/po-util.sh https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util.sh
-  chmod +x ~/po-util.sh
-  rm ~/.po-util-README.md
-  curl -fsSLo ~/.po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
+  brew update
+  brew install po
   exit
 fi
 
