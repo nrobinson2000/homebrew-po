@@ -473,6 +473,8 @@ then
   # clone firmware repository
   cd "$BASE_FIRMWARE" || exit
 
+  echo
+
     MESSAGE="Installing Particle firmware from Github..." ; blue_echo
     git clone https://github.com/spark/firmware.git
 
@@ -480,7 +482,7 @@ then
   then
     brew tap PX4/homebrew-px4
     brew update
-
+    echo
     # Install ARM toolchain
     MESSAGE="Installing ARM toolchain..." ; blue_echo
     brew install gcc-arm-none-eabi dfu-util
@@ -501,6 +503,7 @@ then
 
     if [ "$(node -v)" == "$NODEVERSION" ];
     then
+    echo
     MESSAGE="Node.js version $NODEVERSION is already installed." ; blue_echo
     else
     MESSAGE="Installing Node.js version $NODEVERSION..." ; blue_echo
@@ -511,6 +514,7 @@ then
     fi
 
     # Install particle-cli
+    echo
     MESSAGE="Installing particle-cli..." ; blue_echo
     sudo npm install -g node-pre-gyp npm serialport particle-cli
   fi # CLOSE: "$OS" == "Darwin"
