@@ -553,14 +553,8 @@ then
 if [ "$2" == "photon" ] || [ "$2" == "P1" ] || [ "$2" == "electron" ] || [ "$2" == "pi" ];
 then
 DEVICE_TYPE="$2"
-else
-echo
-  MESSAGE="Please specify which device type you will be using.
-Example:
-  po init photon" ; blue_echo
-echo
-  exit
 fi
+
   mkdir firmware/
   echo "#include \"Particle.h\"
 
@@ -576,6 +570,8 @@ void loop() // Put code here to loop forever
 
   cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/po-util-README.md" README.md
 
+if [ "$DEVICE_TYPE" != "" ];
+then
 echo "---
 cmd: ~/po-util.sh $DEVICE_TYPE build
 
@@ -617,6 +613,7 @@ targets:
     keymap: ctrl-alt-5
     name: DFU
 " >> .atom-build.yml
+fi
 
 echo
 MESSAGE="Directory initialized as a po-util project for $DEVICE_TYPE" ; green_echo

@@ -1,0 +1,13 @@
+os:
+  - osx
+
+script:
+  - brew tap nrobinson2000/po
+  - brew update
+  - brew install po
+  - mkdir test && cd test && po init
+  - time po photon build
+  - time po electron clean
+  - time po electron build
+  - time po P1 clean
+  - time po P1 build
