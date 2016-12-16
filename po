@@ -652,7 +652,7 @@ then
   sudo npm update -g particle-cli
   MESSAGE="Updating po-util.." ; blue_echo
   brew update
-  brew install po
+  brew upgrade po
   exit
 fi
 
