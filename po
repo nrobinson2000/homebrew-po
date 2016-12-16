@@ -18,6 +18,7 @@
 # source code.
 # Read more at https://github.com/nrobinson2000/po-util
 # ACII Art Generated from: http://www.patorjk.com/software/taag
+# Homebrew version at: https://github.com/nrobinson2000/homebrew-po
 
 # Helper functions
 function pause()
@@ -526,7 +527,6 @@ then
   the latest versions of po-util, Particle Firmware and particle-cli, or run
   \"po install\" to update all dependencies.
   " ; green_echo
-  source ~/.bashrc
   exit
 fi
 
