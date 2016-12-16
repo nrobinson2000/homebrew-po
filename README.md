@@ -6,7 +6,6 @@ This is the repository for the [Homebrew](http://brew.sh/) version of [**po-util
 # Install
 
     $ brew tap nrobinson2000/po
-    $ brew update
     $ brew install po
     $ po install
 

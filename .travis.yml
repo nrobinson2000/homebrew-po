@@ -3,7 +3,6 @@ os:
 
 script:
   - brew tap nrobinson2000/po
-  - brew update
   - brew install po
   - ./config-expect.sh
   - po install

@@ -424,20 +424,10 @@ DFUBAUDRATE=19200       # changed in the "~/.po" file.
 CWD="$(pwd)" # Global Current Working Directory variable
 
 # Mac OSX uses lowercase f for stty command
-if [ "$(uname -s)" == "Darwin" ];
-  then
+
     OS="Darwin"
     STTYF="-f"
     MODEM="$(ls -1 /dev/cu.* | grep -vi bluetooth | tail -1)"
-  else
-    OS="Linux"
-    STTYF="-F"
-    MODEM="$(ls -1 /dev/* | grep "ttyACM" | tail -1)"
-
-    #THIS COULD BE IMPROVED!
-    GCC_ARM_VER=gcc-arm-none-eabi-4_9-2015q3 # Updated to 4.9
-    GCC_ARM_PATH=$BINDIR/gcc-arm-embedded/$GCC_ARM_VER/bin/
-fi
 
 
 if [ "$1" == "config" ];
@@ -574,35 +564,35 @@ void loop() // Put code here to loop forever
 if [ "$DEVICE_TYPE" != "" ];
 then
 echo "---
-cmd: ~/po-util.sh $DEVICE_TYPE build
+cmd: po $DEVICE_TYPE build
 
 targets:
   Build:
     args:
       - $DEVICE_TYPE
       - build
-    cmd: ~/po-util.sh
+    cmd: po
     keymap: ctrl-alt-1
     name: Build
   Flash:
     args:
       - $DEVICE_TYPE
       - flash
-    cmd: ~/po-util.sh
+    cmd: po
     keymap: ctrl-alt-2
     name: Flash
   Clean:
     args:
       - $DEVICE_TYPE
       - clean
-    cmd: ~/po-util.sh
+    cmd: po
     keymap: ctrl-alt-3
     name: Clean
   DFU:
     args:
       - $DEVICE_TYPE
       - dfu
-    cmd: ~/po-util.sh
+    cmd: po
     keymap: ctrl-alt-4
     name: DFU
   OTA:
@@ -610,7 +600,7 @@ targets:
       - $DEVICE_TYPE
       - ota
       - --multi
-    cmd: ~/po-util.sh
+    cmd: po
     keymap: ctrl-alt-5
     name: DFU
 " >> .atom-build.yml
