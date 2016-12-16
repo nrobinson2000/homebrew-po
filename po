@@ -480,11 +480,11 @@ then
 
   if [ "$OS" == "Darwin" ]; # Mac installation steps
   then
-    brew tap PX4/homebrew-px4
-    brew update
     echo
     # Install ARM toolchain
     MESSAGE="Installing ARM toolchain..." ; blue_echo
+    brew tap PX4/homebrew-px4
+    brew update
     brew install gcc-arm-none-eabi dfu-util
 
     # Install Node.js
@@ -506,6 +506,7 @@ then
     echo
     MESSAGE="Node.js version $NODEVERSION is already installed." ; blue_echo
     else
+    echo
     MESSAGE="Installing Node.js version $NODEVERSION..." ; blue_echo
     curl -fsSLO "https://nodejs.org/dist/$NODEVERSION/$INSTALLVERSION.pkg"
     sudo installer -pkg node-*.pkg -target /
@@ -568,7 +569,7 @@ void loop() // Put code here to loop forever
 
 }" > firmware/main.cpp
 
-  cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/po/po-util-README.md" README.md
+  cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/homebrew-po/po-util-README.md" README.md
 
 if [ "$DEVICE_TYPE" != "" ];
 then
