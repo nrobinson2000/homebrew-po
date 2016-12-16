@@ -10,8 +10,10 @@ class Po < Formula
   end
 
   def caveats; <<-EOS.undent
+
   In order to complete the installation of po-util,
   you must run 'po install'.
+  
   EOS
   end
 
