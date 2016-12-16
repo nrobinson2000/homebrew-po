@@ -940,7 +940,7 @@ then
     exit
   fi # Close list
 
-    if [ "$2" == "package" ] || [ "$2" == "pack" ];
+    if [ "$2" == "package" ] || [ "$2" == "pack" ] || [ "$2" == "export" ];
     then
       DIRWARNING="true"
       find_objects "$3"
