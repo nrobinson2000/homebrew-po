@@ -6,6 +6,7 @@ script:
   - brew update
   - brew install po
   - ./config-expect.sh
+  - po install
   - mkdir test && cd test && po init
   - time po photon build
   - time po electron clean

@@ -568,7 +568,7 @@ void loop() // Put code here to loop forever
 
 }" > firmware/main.cpp
 
-  cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/po-util-README.md" README.md
+  cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/po/po-util-README.md" README.md
 
 if [ "$DEVICE_TYPE" != "" ];
 then
