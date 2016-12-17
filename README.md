@@ -2,7 +2,7 @@
 
 # Particle Offline Utility: The Ultimate Local Particle Experience for Linux and macOS - Homebrew Edition
 
-This is the repository for the [Homebrew](http://brew.sh/) version of [**po-util**](https://github.com/nrobinson2000/po-util).
+This is the repository for the [Homebrew](http://brew.sh/) Edition of [**po-util**](https://github.com/nrobinson2000/po-util).
 
 # Install
 
