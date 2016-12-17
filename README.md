@@ -10,8 +10,8 @@ This is the repository for the [Homebrew](http://brew.sh/) version of [**po-util
     $ brew install po
     $ po install
 
-# Why use the Homebrew version of po-util?
+# Why use the Homebrew Edition of po-util?
 
-The Homebrew version of po-util makes installing and using po-util much cleaner.  It doesn't rely on bash aliases, it has releases, and is more stable.
+The Homebrew Edition of po-util makes installing and using po-util much cleaner.  It doesn't rely on bash aliases, it has releases, and is more stable.
 
 I recommend the Homebrew version of po-util over the original version of po-util if you are on macOS.
