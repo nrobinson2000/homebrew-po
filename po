@@ -663,14 +663,13 @@ then
 
   if [ "$2" == "get" ] || [ "$2" == "install" ]; # Download a library with git OR Install from libs.txt
   then
-    DIRWARNING="true"
-    find_objects "$4"
 
     cd "$LIBRARY"
 
-
         if [ "$3" == "" ]; # Install from libs.txt
         then
+          DIRWARNING="true"
+          find_objects
 
           cat $FIRMWAREDIR/../libs.txt | while read i
           do
@@ -694,10 +693,14 @@ then
 
     if [ "$4" != "" ];  # Download a library with git
     then
+      echo
       git clone "$3" "$4" || ( echo ; MESSAGE="Could not download Library.  Please supply a valid URL to a git repository." ; red_echo )
+      echo
       exit
     else
+      echo
       git clone "$3" || ( echo ; MESSAGE="Could not download Library.  Please supply a valid URL to a git repository." ; red_echo )
+      echo
       exit
     fi
     exit
@@ -930,16 +933,43 @@ then
     exit
   fi
 
+  MESSAGE="Checking for updates..." ; green_echo
+  echo
+
   for OUTPUT in $(ls -1 "$LIBRARY")
   do
   	cd "$LIBRARY/$OUTPUT"
+
+    if [ -d "$LIBRARY/$OUTPUT/.git" ]; # Only do git pull if it is a repository
+    then
     MESSAGE="Updating library $OUTPUT..." ; blue_echo
-    echo
+    # echo
     git pull
     echo
+    fi
   done
   exit
 fi # Close Update
+
+if [ "$2" == "source" ];
+then
+  echo
+  MESSAGE="Listing installed libraries that are cloneable..." ; blue_echo
+  echo
+
+  for OUTPUT in $(ls -1 "$LIBRARY")
+  do
+  	cd "$LIBRARY/$OUTPUT"
+
+    if [ -d "$LIBRARY/$OUTPUT/.git" ]; # Only if it is a repository
+    then
+      LIB_URL="$( cd $LIBRARY/$OUTPUT && git config --get remote.origin.url )"
+      echo "$LIB_URL $OUTPUT"
+      echo
+    fi
+  done
+  exit
+fi ### Close source
 
   echo
   MESSAGE="Please choose a valid command, or run \"po lib\" for help." ; red_echo
