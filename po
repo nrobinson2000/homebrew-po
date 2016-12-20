@@ -943,7 +943,6 @@ then
     if [ -d "$LIBRARY/$OUTPUT/.git" ]; # Only do git pull if it is a repository
     then
     MESSAGE="Updating library $OUTPUT..." ; blue_echo
-    # echo
     git pull
     echo
     fi
