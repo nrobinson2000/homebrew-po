@@ -1,6 +1,7 @@
-.TH po-util 1 "16 Dec 2016" "Darwin" "Particle Offline Utility"
+.TH PO 1 "16 Dec 2016" "Darwin" "Particle Offline Utility"
 .SH NAME
-po-util \- The Ultimate Local Particle Experience for Linux and macOS
+.B po-util
+\- The Ultimate Local Particle Experience for Linux and macOS
 .SH SYNOPSIS
 
 .B po
@@ -81,7 +82,8 @@ Recompile and update the system firmware on a device.
 .B ota
 Upload code Over The Air using particle-cli.
 
-NOTE: You can sequentially flash code to several devices by passing the -m or --multi argument to "ota".
+NOTE: You can sequentially flash code to multiple devices by passing the -m or --multi argument to
+.B ota
 
 Example:
 
@@ -89,6 +91,10 @@ Example:
 photon ota -m product-firmware/
 
 NOTE: This is different from the product firmware update feature in the Particle Console because it updates the firmware of devices one at a time and only if the devices are online when the command is run.
+
+NOTE: Using -m or --multi depends on a
+.B devices.txt
+file inside of your project. The file must contain the names of your devices, one per line, and the devices must all be of the same type.
 
 .TP
 .B serial
@@ -103,6 +109,23 @@ Select Particle firmware branch and DFU trigger baud rate.
 .TP
 .B setup
 Get a device's ID and connect it Wi-Fi. Manually claim it after.
+
+.TP
+.B dfu
+Flash pre-compiled code to your device.
+
+Example:
+
+.B  po photon
+dfu
+
+.TP
+.B dfu-open
+Put device into DFU mode.
+
+.TP
+.B dfu-close
+Get device out of DFU mode.
 
 .TP
 .B lib | library
