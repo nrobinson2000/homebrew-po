@@ -324,8 +324,6 @@ Enter \"po\" to use the po-util recommended baud rate of 19200." ; blue_echo
 }
 # End of helper functions
 
-
-
 if [ "$1" == "" ]; # Print help
 then
 MESSAGE="                                                     __      __  __
@@ -466,7 +464,6 @@ if [ "$2" == "photon" ] || [ "$2" == "P1" ] || [ "$2" == "electron" ] || [ "$2" 
 then
 DEVICE_TYPE="$2"
 fi
-
   mkdir firmware/
   echo "#include \"Particle.h\"
 
@@ -954,11 +951,9 @@ then
   echo
   MESSAGE="Listing installed libraries that are cloneable..." ; blue_echo
   echo
-
   for OUTPUT in $(ls -1 "$LIBRARY")
   do
   	cd "$LIBRARY/$OUTPUT"
-
     if [ -d "$LIBRARY/$OUTPUT/.git" ]; # Only if it is a repository
     then
       LIB_URL="$( cd $LIBRARY/$OUTPUT && git config --get remote.origin.url )"
