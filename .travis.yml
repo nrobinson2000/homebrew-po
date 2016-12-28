@@ -12,3 +12,5 @@ script:
   - time po electron build
   - time po P1 clean
   - time po P1 build
+  - time po core clean
+  - time po core build
