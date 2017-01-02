@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/nrobinson2000/homebrew-po.svg?branch=master)](https://travis-ci.org/nrobinson2000/homebrew-po)
 
-# [Particle Offline Utility](https://github.com/nrobinson2000/po-util): The Ultimate Local Particle Experience for Linux and macOS - [Homebrew Edition](https://github.com/nrobinson2000/homebrew-po)
+# [Particle Offline Utility:](https://github.com/nrobinson2000/po-util) The Ultimate Local Particle Experience for Linux and macOS - [Homebrew Edition](https://github.com/nrobinson2000/homebrew-po)
 
 <p align="center">
 <img src="https://cdn.rawgit.com/nrobinson2000/homebrew-po/master/logo.svg">
