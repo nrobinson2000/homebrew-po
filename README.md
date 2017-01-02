@@ -3,7 +3,7 @@
 # [Particle Offline Utility](https://github.com/nrobinson2000/po-util): The Ultimate Local Particle Experience for Linux and macOS - [Homebrew Edition](https://github.com/nrobinson2000/homebrew-po)
 
 <p align="center">
-<img src="https://nrobinson2000.github.io/po-util/logos/po-util-updated.svg">
+<img src="logo.svg">
 </p>
 
 # Install
