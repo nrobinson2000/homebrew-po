@@ -1,8 +1,10 @@
 [![Build Status](https://travis-ci.org/nrobinson2000/homebrew-po.svg?branch=master)](https://travis-ci.org/nrobinson2000/homebrew-po)
 
-## Particle Offline Utility: The Ultimate Local Particle Experience for Linux and macOS - Homebrew Edition
+# [Particle Offline Utility]((https://github.com/nrobinson2000/po-util)): The Ultimate Local Particle Experience for Linux and macOS - [Homebrew Edition](https://github.com/nrobinson2000/homebrew-po)
 
-This is the repository for the [Homebrew](http://brew.sh/) Edition of [**po-util**](https://github.com/nrobinson2000/po-util).
+<p align="center">
+<img src="https://nrobinson2000.github.io/po-util/logos/po-util-updated.svg">
+</p>
 
 # Install
 
