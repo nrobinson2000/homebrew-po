@@ -376,6 +376,16 @@ then
   exit
 fi
 
+if [ "$1" == "setup-atom" ];
+then
+  echo
+  MESSAGE="Installing Atom packages to enhance po-util experience..." ; blue_echo
+  echo
+  apm install build minimap file-icons language-particle
+  echo
+  exit
+fi
+
 # Configuration file is created at "~/.po"
 SETTINGS=~/.po
 BASE_FIRMWARE=~/github  # These
