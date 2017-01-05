@@ -1,4 +1,4 @@
-.TH PO 1 "16 Dec 2016" "Darwin" "Particle Offline Utility"
+.TH PO 1 "5 Jan 2017" "po-util" "Particle Offline Utility"
 .SH NAME
 .B po-util
 \- The Ultimate Local Particle Experience for Linux and macOS
@@ -216,7 +216,14 @@ All symlinks in the project are removed, but "libs.txt" is untouched.  This is i
 
 .TP
 .B pack | package | export
-Copy all of your source code and libraries used into a packaged (exported) "packaged-firmware" directory inside of your project.  Useful for sharing your project with so that it can be easily used by other users that do not have po-util.
+Copy all of your source code and linked libraries in "firmware" into a packaged directory inside of your project.  A Tarball of the packaged directory is also created.  Useful for sharing your project with so that it can be easily used by users that do not have po-util.
+
+NOTE:
+If you are building for Raspberry Pi, Docker will not follow the symlinked files, and you will have to build the packaged directory instead.
+
+.B po lib pack
+
+.B po pi build <PROJECT>-packaged
 
 .TP
 .B update | refresh
@@ -248,7 +255,7 @@ CTRL-ALT-4
 CTRL-ALT-5
 
 .SH NOTES
-To build locally for Raspberry Pi you must have docker installed.
+To build locally for Raspberry Pi you must have Docker installed.
 
 .SH CREDITS
 Created for the Particle Community
@@ -256,7 +263,7 @@ by Nathan Robinson
 
 Some elements were inspired by GPL projects and threads on the Particle Community and StackOverflow.
 
-.SH "AUTHORS"
+.SH AUTHORS
 Nathan D. Robinson <nrobinson2000@me.com>
 
 .fi

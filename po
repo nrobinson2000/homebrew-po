@@ -954,15 +954,22 @@ then
     then
       DIRWARNING="true"
       find_objects "$3"
-
-      if [ -d "$FIRMWAREDIR/../packaged-firmware" ];
+      PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
+      PROJECTDIR="${PROJECTDIR##*/}"
+      if [ -d "$FIRMWAREDIR/../$PROJECTDIR-packaged" ];
       then
-        rm -rf "$FIRMWAREDIR/../packaged-firmware"
+        rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged"
+        rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz"
       fi
 
-      mkdir "$FIRMWAREDIR/../packaged-firmware"
+      mkdir "$FIRMWAREDIR/../$PROJECTDIR-packaged"
       cd "$FIRMWAREDIR"
-      cp * "$FIRMWAREDIR/../packaged-firmware"
+      cp * "$FIRMWAREDIR/../$PROJECTDIR-packaged"
+      tar -cvzf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz" "$FIRMWAREDIR/../$PROJECTDIR-packaged" &> /dev/null
+      echo
+      MESSAGE="Firmware has been packaged as \"$PROJECTDIR-packaged\" and \"$PROJECTDIR-packaged.tar.gz\"
+in \"$PROJECTDIR\". Feel free to use either when sharing your firmware." ; blue_echo
+      echo
     exit
     fi
 
