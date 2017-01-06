@@ -18,11 +18,7 @@ library LIBRARY_COMMAND
 .SH DESCRIPTION
 Particle Offline Utility, called po-util or
 .B po
-is a script for installing and using the Particle Toolchain on Linux and macOS.  It simplifies and accelerates the local building experience for Particle devices by providing useful commands and utilities to improve the development workflow.
-
-Notable features include: local building, firmware uploading using dfu-util, and library management.
-
-The goal of po-util is provide the best local Particle experience possible.
+is a script for installing and using the Particle Toolchain on Linux and macOS.  It simplifies the local building experience by providing commands to create a unique local development workflow. Local building, firmware uploading using dfu-util, and library management are key features.
 
 .SH OPTIONS
 
@@ -57,7 +53,7 @@ Refresh all code (Run after switching device or directory).
 
 .TP
 .B init
-Initialize your current working directory as a po-util project.  You can optionally supply another argument to specify which platform your project if for. The purpose of this argument is to generate a ".atom-build.yml" file which provides keyboard shortcuts for using po-util within Atom. More information on the shortcuts can be found below.
+Initialize your current working directory as a po-util project.  You can optionally supply another argument to specify which platform your project if for. The purpose of this argument is to generate a ".atom-build.yml" file which provides keyboard shortcuts for using po-util within Atom. More information on the shortcuts is below.
 
 Example:
 
@@ -139,18 +135,18 @@ The library manager makes it easy to use Particle libraries hosted on GitHub wit
 .B ~/.po-util/lib
 and creating symbolic links to the relevant library files in your projects.  It keeps track of which libraries are used in a project in a
 .B libs.txt
-file in every project. It has many more features which are listed below.
+file in every project. More features which are listed below.
 
 .SH OPTIONS
 
 .TP
 .B get | install
-Download a Particle Library from GitHub and optionally name it. If run with no arguments, libraries listed in a "libs.txt" are installed.
+Download a Particle Library with Git and optionally name it. If run with no arguments, libraries listed in "libs.txt" are installed.
 
-Example of getting a library from Git:
+Example of downloading a library from GitHub:
 
 .B  po lib
-get https://github.com/user/libraryName libraryName
+get https://github.com/someUser/libraryName libraryName
 
 .TP
 .B add | import
@@ -212,11 +208,11 @@ Libraries listed in "libs.txt" are installed and symlinks are created.
 
 .TP
 .B clean
-All symlinks in the project are removed, but "libs.txt" is untouched.  This is ideal for releasing you project, not having to have the library source files in your "firmware" directory, but rather just a list that people can "po lib setup" to download your project's dependencies.
+All symlinks in the project are removed, but "libs.txt" is untouched.  This is ideal for releasing you project, as there will be no linked libraries in the "firmware" directory, but rather a list that people can run "po lib setup" to download your project's dependencies.
 
 .TP
 .B pack | package | export
-Copy all of your source code and linked libraries in "firmware" into a packaged directory inside of your project.  A Tarball of the packaged directory is also created.  Useful for sharing your project with so that it can be easily used by users that do not have po-util.
+Copy your source code and linked libraries in "firmware" into a packaged directory inside of your project.  A tarball of the packaged directory is also created.  A useful method for sharing your project with users who do not have po-util.
 
 NOTE:
 If you are building for Raspberry Pi, Docker will not follow the symlinked files, and you will have to build the packaged directory instead.
@@ -227,7 +223,7 @@ If you are building for Raspberry Pi, Docker will not follow the symlinked files
 
 .TP
 .B update | refresh
-Update all of your libraries.
+Update your (git) libraries.
 
 .SH KEYBOARD SHORTCUTS
 
