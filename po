@@ -398,9 +398,9 @@ rmHeaders()
 {
   if [ "$AUTO_HEADER" == "true" ];
   then
-  if (grep "#include \"$3.h\"" "$FIRMWAREDIR/main.cpp") &> /dev/null ;
+  if (grep "#include \"$1.h\"" "$FIRMWAREDIR/main.cpp") &> /dev/null ;
   then
-    grep -v "#include \"$3.h\"" "$FIRMWAREDIR/main.cpp" > "$FIRMWAREDIR/main.cpp.temp"
+    grep -v "#include \"$1.h\"" "$FIRMWAREDIR/main.cpp" > "$FIRMWAREDIR/main.cpp.temp"
     rm "$FIRMWAREDIR/main.cpp"
     mv "$FIRMWAREDIR/main.cpp.temp" "$FIRMWAREDIR/main.cpp"
   fi
@@ -824,6 +824,7 @@ then
       echo
       MESSAGE="Library $3 not found" ; red_echo ; echo ; exit
     fi
+      LIB_NAME="$3"
       addLib
       #Add entries to libs.txt file
       LIB_URL="$( cd $LIBRARY/$3 && git config --get remote.origin.url )"
@@ -872,7 +873,7 @@ then
         rm "$FIRMWAREDIR/../libs.txt"
       fi
       echo
-      rmHeaders
+      rmHeaders "$3"
       exit
     else
       echo
@@ -883,7 +884,7 @@ then
         MESSAGE="Removing library $3..." ; blue_echo
         rm "$FIRMWAREDIR/$3.cpp"
         rm "$FIRMWAREDIR/$3.h"
-        rmHeaders
+        rmHeaders "$3"
         echo
         MESSAGE="Library $3 has been purged." ; green_echo
         exit
