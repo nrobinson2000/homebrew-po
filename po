@@ -536,7 +536,7 @@ then
     # Install particle-cli
     echo
     MESSAGE="Installing particle-cli..." ; blue_echo
-    sudo npm install -g node-pre-gyp npm serialport particle-cli
+    sudo npm install -g --unsafe-perm node-pre-gyp npm serialport particle-cli
 
   MESSAGE="
   Thank you for installing po-util. Be sure to check out
