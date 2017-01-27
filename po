@@ -342,7 +342,7 @@ libraries?" ; blue_echo
 
 addLib()
 {
-  if [ -f "$FIRMWAREDIR/$LIB_NAME.cpp" ] || [ -f "$FIRMWAREDIR/$LIB_NAME.h" ] || [ -d "$FIRMWAREDIR/$LIB_NAME"];
+  if [ -f "$FIRMWAREDIR/$LIB_NAME.cpp" ] || [ -f "$FIRMWAREDIR/$LIB_NAME.h" ] || [ -d "$FIRMWAREDIR/$LIB_NAME" ];
   then
     echo
     MESSAGE="Library $LIB_NAME is already added to this project..." ; red_echo
