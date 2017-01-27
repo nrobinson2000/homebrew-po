@@ -713,6 +713,7 @@ then
       rm -rf "$FIRMWAREDIR/$file_base" &> /dev/null # Transition
       rm "$FIRMWAREDIR/$file_base.h" &> /dev/null   # to new
       rm "$FIRMWAREDIR/$file_base.cpp" &> /dev/null # system
+      rmHeaders "$file_base"
     fi
   done
 
