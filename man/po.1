@@ -194,7 +194,7 @@ List all downloaded libraries. Libraries are kept in:
 .B ~/.po-util/lib
 
 .TP
-.B source
+.B src | source
 List all downloaded libraries that are repositories and include their Git URL's.
 
 .TP
@@ -224,6 +224,34 @@ If you are building for Raspberry Pi, Docker will not follow the symlinked files
 .TP
 .B update | refresh
 Update your (git) libraries.
+
+.TP
+.B ex | examples
+Library example manager.  Can be used to list available examples for a library and load them into a project.
+
+.SH LIBRARY EXAMPLE MANAGER
+
+.TP
+.B po lib ex
+A work in progress.  The Library Example Manger allows you to find examples in a library and load them into your project for testing or modification.  Your original source code is backed up in the "main.cpp.YYYY-MM-DD-HH-mm.txt" format.  A "libs.txt" will be generated from the example upon loading.
+
+.TP
+.B ls | list
+List all examples in a Library.
+
+Example:
+
+.B  po lib ex
+ls libraryName
+
+.TP
+.B load
+Load an example from a library into the current project. A "libs.txt" will be generated from the example upon loading.
+
+Example:
+
+.B po lib ex
+load libraryName exampleName
 
 .SH KEYBOARD SHORTCUTS
 
