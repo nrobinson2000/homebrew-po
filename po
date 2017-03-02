@@ -169,6 +169,8 @@ build_message()
   exit
 }
 
+dfu_open()
+{
 if [ "$DEVICE_TYPE" == "duo" ];
 then
   if [ "$MODEM_DUO" != "" ];
@@ -200,6 +202,7 @@ if [ "$MODEM" ];
 then
   stty -f "$MODEM" "$DFUBAUDRATE" > /dev/null
 fi
+}
 
 switch_branch()
 {
