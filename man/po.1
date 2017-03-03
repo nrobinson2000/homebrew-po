@@ -1,4 +1,4 @@
-.TH PO 1 "5 Jan 2017" "po-util" "Particle Offline Utility"
+.TH PO 1 "2 Mar 2017" "po-util" "Particle Offline Utility"
 .SH NAME
 .B po-util
 \- The Ultimate Local Particle Experience for Linux and macOS
@@ -16,9 +16,10 @@ install [full_install_path]
 .B po
 library LIBRARY_COMMAND
 .SH DESCRIPTION
-Particle Offline Utility, called po-util or
-.B po
-is a script for installing and using the Particle Toolchain on Linux and macOS.  It simplifies the local building experience by providing commands to create a unique local development workflow. Local building, firmware uploading using dfu-util, and library management are key features.
+Particle Offline Utility, called po-util or po, is a tool for installing and using the Particle Toolchain on Linux and macOS. Local building, firmware uploading using dfu-util or particle-cli, and library management are key features.
+
+.B po-util
+supports the Photon, Electron, Core, P1, Raspberry Pi, and Redbear Duo.
 
 .SH OPTIONS
 
@@ -68,7 +69,7 @@ init photon
 
 .TP
 .B update
-Download the latest releases of Particle firmware, particle-cli and po-util.
+Download the latest releases of Redbear Duo firmware, Particle firmware, particle-cli and po-util.  You may supply another arguement to choose to only update only one firmware repository, using "firmware" for Particle, and "duo" for the Redbear Duo.
 
 .TP
 .B upgrade

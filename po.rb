@@ -2,7 +2,7 @@ class Po < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience for Linux and macOS"
   homepage 'https://github.com/nrobinson2000/po-util'
   head 'https://github.com/nrobinson2000/homebrew-po', :using => :git
-  url 'https://github.com/nrobinson2000/homebrew-po/archive/58.0.tar.gz'
+  url 'https://github.com/nrobinson2000/homebrew-po/archive/59.0.tar.gz'
   sha256 'e91a38ec13709f3f008ae713536d13596e5def732513e373280bdcc0119314a0'
 
   def install

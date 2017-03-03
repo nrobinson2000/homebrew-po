@@ -234,11 +234,11 @@ build_firmware()
 
 #Temporary fix for http://community.particle.io/t/stm32-usb-otg-driver-error-on-v0-6-0/26814
 # STRING='CPPSRC += $(call target_files,$(BOOTLOADER_MODULE_PATH)/../hal/src/stm32/,newlib.cpp)'
-# echo "$STRING" >> "$BASE_FIRMWARE/firmware/bootloader/src/electron/sources.mk"
-# sed "126s/.*/#define USB_OTG_MAX_TX_FIFOS (4*2)/" "$BASE_FIRMWARE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h" > temp.particle
+# echo "$STRING" >> "$FIRMWARE_PARTICLE/firmware/bootloader/src/electron/sources.mk"
+# sed "126s/.*/#define USB_OTG_MAX_TX_FIFOS (4*2)/" "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h" > temp.particle
 # sed "132s/.*/#define USB_OTG_MAX_TX_FIFOS (6*2)/" temp.particle > temp.particle.1
-# rm -f "$BASE_FIRMWARE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
-# mv temp.particle.1 "$BASE_FIRMWARE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
+# rm -f "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
+# mv temp.particle.1 "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
 # rm -f temp.particle
 # FIXED in release/v0.6.1-rc.1
 
@@ -761,22 +761,25 @@ then
 
   if [ "$2" == "duo" ]; # Update just duo firmware
   then
+    echo
     MESSAGE="Updating RedBear DUO firmware..." ; blue_echo
     cd "$FIRMWARE_DUO"/firmware || exit
     git stash
-    #git checkout $BRANCH
+    switch_branch "$BRANCH_DUO" &> /dev/null
     git pull
+    echo
     exit
   fi
 
   if [ "$2" == "firmware" ]; # update just particle firmware
   then
+    echo
     MESSAGE="Updating Particle firmware..." ; blue_echo
     cd "$FIRMWARE_PARTICLE"/firmware || exit
-    switch_branch
     git stash
-    #git checkout $BRANCH
+    switch_branch &> /dev/null
     git pull
+    echo
     exit
   fi
 
@@ -800,11 +803,15 @@ echo
   #git checkout $BRANCH
   git pull
 
+  echo
   MESSAGE="Updating particle-cli..." ; blue_echo
   sudo npm update -g particle-cli
+
+  echo
   MESSAGE="Updating po-util.." ; blue_echo
   brew update
   brew upgrade po
+  echo
   exit
 fi
 
@@ -1371,9 +1378,7 @@ fi
 fi # Close Library
 ####################
 
-cd "$BASE_FIRMWARE"/firmware || exit
-
-# Make sure we are using photon, P1, electron, core or pi
+# Make sure we are using photon, P1, electron, pi, core, or duo
 if [ "$1" == "photon" ] || [ "$1" == "P1" ] || [ "$1" == "electron" ] || [ "$1" == "pi" ] || [ "$1" == "core" ] || [ "$1" == "duo" ];
 then
   DEVICE_TYPE="$1"
@@ -1387,12 +1392,12 @@ then
 
   if [ "$DEVICE_TYPE" == "pi" ];
   then
-    switch_branch "feature/raspberry-pi"
+    switch_branch "feature/raspberry-pi"  &> /dev/null
   elif [ "$DEVICE_TYPE" == "duo" ];
   then
-    switch_branch $BRANCH_DUO
+    switch_branch $BRANCH_DUO &> /dev/null
   else
-    switch_branch
+    switch_branch &> /dev/null
   fi
 else
   echo
@@ -1475,19 +1480,53 @@ fi
 #Upgrade our firmware on device
 if [ "$2" == "upgrade" ] || [ "$2" == "patch" ] || [ "$2" == "update" ];
 then
+
+if [ "$DEVICE_TYPE" == "photon" ] || [ "$DEVICE_TYPE" == "P1" ] || [ "$DEVICE_TYPE" == "electron" ]
+then
+
   pause "Connect your device and put into DFU mode. Press [ENTER] to continue..."
   cd "$CWD" || exit
-  sed "2s/.*/START_DFU_FLASHER_SERIAL_SPEED=$DFUBAUDRATE/" "$BASE_FIRMWARE/firmware/build/module-defaults.mk" > temp.particle
-  rm -f "$BASE_FIRMWARE/firmware/build/module-defaults.mk"
-  mv temp.particle "$BASE_FIRMWARE/firmware/build/module-defaults.mk"
+  sed "2s/.*/START_DFU_FLASHER_SERIAL_SPEED=$DFUBAUDRATE/" "$FIRMWARE_PARTICLE/firmware/build/module-defaults.mk" > temp.particle
+  rm -f "$FIRMWARE_PARTICLE/firmware/build/module-defaults.mk"
+  mv temp.particle "$FIRMWARE_PARTICLE/firmware/build/module-defaults.mk"
 
-  cd "$BASE_FIRMWARE/firmware/modules" || exit
+  cd "$FIRMWARE_PARTICLE/firmware/modules" || exit
   make clean all PLATFORM="$DEVICE_TYPE" program-dfu
 
-  cd "$BASE_FIRMWARE/firmware" && git stash || exit
+  cd "$FIRMWARE_PARTICLE/firmware" && git stash || exit
   sleep 1
   dfu-util -d $DFU_ADDRESS1 -a 0 -i 0 -s $DFU_ADDRESS2:leave -D /dev/null &> /dev/null
   exit
+
+else
+  echo
+  MESSAGE="This command can only be used to update the system firmware for
+photon, P1, electron, or duo." ; red_echo
+echo
+
+if [ "$DEVICE_TYPE" == "core" ];
+then
+MESSAGE="On the Spark Core, firmware is monolithic, meaning that the system
+firmware is packaged with the user firmware.  To use a core with po-util
+just manually put it into DFU mode the first time you flash to it." ; blue_echo
+
+echo
+fi
+
+if [ "$DEVICE_TYPE" == "pi" ];
+then
+MESSAGE="Raspberry Pi is still in beta and you must be registered in the beta
+to use Particle on Raspberry Pi.
+
+To \"update\" the system firmware on Raspberry Pi, simply re-install
+particle-agent. https://git.io/vynBd" ; blue_echo
+
+echo
+fi
+
+exit
+fi
+
 fi
 
 # Clean firmware directory
@@ -1555,7 +1594,7 @@ then
   fi
     echo
     #configure_makefile
-    make all -C "$BASE_FIRMWARE/"firmware APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE" DEBUG_BUILD="y" || exit
+    make all -C "$FIRMWARE_PARTICLE/"firmware APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE" DEBUG_BUILD="y" || exit
     build_message
 fi
 
