@@ -567,7 +567,10 @@ MODEM_DUO="$(ls -1 /dev/* | grep "usbmodem" | tail -1)"
 
 if [ "$1" == "config" ];
 then
-  rm "$SETTINGS"
+  if [ -f "$SETTINGS" ];
+  then
+     rm "$SETTINGS"
+  fi
   config
   exit
 fi
