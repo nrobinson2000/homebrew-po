@@ -112,7 +112,8 @@ function find_objects() #Consolidated function
                     else
                         echo
                         red_echo "Firmware not found!"
-                        blue_echo "Please run \"po init\" to setup this repository or choose a valid directory."
+                        blue_echo "Please run \"po init DEVICE FOLDER\" to setup a project,
+or choose a valid directory."
                         echo
                         exit
                     fi
@@ -133,7 +134,8 @@ function find_objects() #Consolidated function
         then
             echo
             red_echo "Firmware directory not found!"
-            blue_echo "Please run \"po init\" to setup this repository or choose a valid directory."
+            blue_echo "Please run \"po init DEVICE FOLDER\" to setup a project,
+or choose a valid directory."
             echo
             exit
         fi
@@ -533,9 +535,9 @@ then
     echo "Copyright (GPL) 2017 Nathan D. Robinson
 
     Usage: po DEVICE_TYPE COMMAND DEVICE_NAME
-    po DFU_COMMAND
-    po install [full_install_path]
-    po library LIBRARY_COMMAND
+           po DFU_COMMAND
+           po install [full_install_path]
+           po library LIBRARY_COMMAND
 
     Run \"man po\" for help.
     "
@@ -685,18 +687,18 @@ then
   if [ "$2" == "photon" ] || [ "$2" == "P1" ] || [ "$2" == "electron" ] || [ "$2" == "pi" ] || [ "$2" == "core" ] || [ "$2" == "duo" ];
   then
     DEVICE_TYPE="$2"
+    FOLDER="$3"
   else
-    red_echo "
-Please chose a device type.
-    "
-    exit
+    blue_echo "
+Please chose a device type next time :)"
+  FOLDER="$2"
   fi
 
-  if [[ "$3" == "/"* ]]; # Check for absolute or relative
+  if [[ "$FOLDER" == "/"* ]]; # Check for absolute or relative
   then
-    FIRMWAREDIR="$3/firmware"
+    FIRMWAREDIR="$FOLDER/firmware"
   else
-    FIRMWAREDIR="$CWD/$3/firmware"
+    FIRMWAREDIR="$CWD/$FOLDER/firmware"
   fi
 
   if [ -d "$FIRMWAREDIR" ];
@@ -720,7 +722,7 @@ void loop() // Put code here to loop forever
 
 }" > "$FIRMWAREDIR/main.cpp"
 
-    cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/homebrew-po/po-util-README.md" README.md
+    cp "$(brew --prefix)/Homebrew/Library/Taps/nrobinson2000/homebrew-po/po-util-README.md" "$FIRMWAREDIR/../README.md"
 
     if [ "$DEVICE_TYPE" != "" ];
     then
@@ -1584,7 +1586,7 @@ then
 blue_echo "Raspberry Pi is still in beta and you must be registered in the beta
 to use Particle on Raspberry Pi.
 
-To \"update\" the system firmware on Raspberry Pi, simply re-install
+To update the \"system firmware\" on Raspberry Pi, simply re-install
 particle-agent. https://git.io/vynBd"
 
 echo
@@ -1680,7 +1682,7 @@ then
   fi
   dfu_open
   echo
-  (build_firmware && echo && green_echo "Building firmware was successful! Flashing with dfu-util..." && echo) || (red_echo 'Building firmware failed! Closing DFU...' && echo && dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D /dev/null &> /dev/null && exit)
+  ( build_firmware && echo && green_echo "Building firmware was successful! Flashing with dfu-util..." && echo ) || ( echo && red_echo 'Building firmware failed! Closing DFU...' && echo && dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D /dev/null &> /dev/null && exit )
   dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREDIR/../bin/firmware.bin" || exit #&> /dev/null
   echo
   blue_echo "Firmware successfully flashed to $DEVICE_TYPE on $MODEM"
