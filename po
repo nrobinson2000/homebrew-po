@@ -1138,27 +1138,26 @@ then
     exit
   fi # Close list
 
-    if [ "$2" == "package" ] || [ "$2" == "pack" ] || [ "$2" == "export" ];
+  if [ "$2" == "package" ] || [ "$2" == "pack" ] || [ "$2" == "export" ];
+  then
+    DIRWARNING="true"
+    find_objects "$3"
+    PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
+    PROJECTDIR="${PROJECTDIR##*/}"
+    if [ -d "$FIRMWAREDIR/../$PROJECTDIR-packaged" ];
     then
-      DIRWARNING="true"
-      find_objects "$3"
-      PROJECTDIR="$(cd $FIRMWAREDIR/.. && pwd)"
-      PROJECTDIR="${PROJECTDIR##*/}"
-      if [ -d "$FIRMWAREDIR/../$PROJECTDIR-packaged" ];
-      then
-        rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged"
-        rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz"
-      fi
-      mkdir "$FIRMWAREDIR/../$PROJECTDIR-packaged"
-      cd "$FIRMWAREDIR"
-      cp * "$FIRMWAREDIR/../$PROJECTDIR-packaged"
-      tar -cvzf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz" "$FIRMWAREDIR/../$PROJECTDIR-packaged" &> /dev/null
-      echo
-      blue_echo "Firmware has been packaged as \"$PROJECTDIR-packaged\" and \"$PROJECTDIR-packaged.tar.gz\"
-in \"$PROJECTDIR\". Feel free to use either when sharing your firmware."
-      echo
-    exit
+      rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged"
+      rm -rf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz"
     fi
+
+    cp -r "$FIRMWAREDIR" "$FIRMWAREDIR/../$PROJECTDIR-packaged"
+    tar -cvzf "$FIRMWAREDIR/../$PROJECTDIR-packaged.tar.gz" "$FIRMWAREDIR/../$PROJECTDIR-packaged" &> /dev/null
+    echo
+    blue_echo "Firmware has been packaged as \"$PROJECTDIR-packaged\" and \"$PROJECTDIR-packaged.tar.gz\"
+in \"$PROJECTDIR\". Feel free to use either when sharing your firmware."
+    echo
+  exit
+  fi
 
   if [ "$2" == "help" ] || [ "$2" == "" ]; # SHOW HELP TEXT FOR "po library"
   then
