@@ -91,21 +91,19 @@ firmware/
 bin/
 ├ firmware.bin
 └ ...
+ ci/
  devices.txt
  libs.txt
  .atom-build.yml
+ .gitignore
  README.md
 ```
 
-  * All user code is kept inside of `main.cpp`.
-
+  * All user code is kept inside of `firmware/`.
   * The compiled binary will be named `firmware.bin`, and it will be in `bin/`.
-
   * You can keep track of which devices are in a project and list which ones to be flashed Over The Air in `devices.txt`.
-
-  * You can easily add libraries to a project. Added libraries are kept track of in `libs.txt`.
-
-  * Atom shortcuts are a new feature of `po-util`, and `.atom-build.yml` contains the configuration for the shortcuts.
+  * Libraries are kept track of in `libs.txt`.
+  * Atom shortcuts are configured in`.atom-build.yml`.
 
 # Project setup
 
