@@ -120,15 +120,11 @@ When using `po-util`, your code is arranged into projects with the structure
 described above. This not only lets you easily work on many projects on one
 computer, but it provides a standardized way of building locally.
 
-Creating a project with `po-util` is simple. All that you need to do is create
-a folder and run `po init` inside of it to initialize the project by
-creating the appropriate files and directories. Below is an example:
+Creating a project with `po-util` is simple when you use `po init` to initialize a project by creating the necessary files. Below is an example:
 
-    $ mkdir someProject
-    $ cd someProject
-    $ po init DEVICE_TYPE
+    $ po init DEVICE_TYPE someProject
 
-You can set `DEVICE_TYPE` to either `photon`, `P1`, `electron`, `core`, or `pi`. This is
+You can set `DEVICE_TYPE` to either `photon`, `P1`, `electron`, `core`, `pi`, or `duo`. This is
 necessary for generating the Atom shortcuts file appropriately.
 
 # More Information
