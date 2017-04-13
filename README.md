@@ -79,7 +79,7 @@ here.](http://community.particle.io/t/po-util-a-toolchain-installer-helper-for-l
 
 # Project Structure
 
-The directory structure of a **full** `po-util` project is arranged like so:
+The directory structure of a full `po-util` project is arranged like so:
 
 ```
 firmware/
