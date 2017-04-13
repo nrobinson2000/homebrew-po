@@ -39,7 +39,7 @@ There are two versions of po-util. The first is [po-util Classic](https://github
 Both versions of po-util have the same features. In December 2016, Homebrew Edition was forked from po-util in order to allow po-util to be installed with Homebrew.  The original po-util was renamed to Classic, and was made Linux exclusive. Both Classic and Homebrew Edition continue to be developed and maintained in parallel.
 
 <p align="center">
-<img src="images/po.png">
+<img src="images/po.gif">
 </p>
 
 # Key Features
