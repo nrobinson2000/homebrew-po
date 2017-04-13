@@ -95,7 +95,9 @@ bin/
  devices.txt
  libs.txt
  .atom-build.yml
+ .travis.yml
  .gitignore
+ .git/
  README.md
 ```
 
@@ -104,6 +106,7 @@ bin/
   * You can keep track of which devices are in a project and list which ones to be flashed Over The Air in `devices.txt`.
   * Libraries are kept track of in `libs.txt`.
   * Atom shortcuts are configured in`.atom-build.yml`.
+  * Every `po-util` project is initialized as a repository with scripts in `ci/` to use [Travis CI](https://travis-ci.org/) for testing.
 
 # Project setup
 
