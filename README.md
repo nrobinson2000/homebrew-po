@@ -79,12 +79,7 @@ here.](http://community.particle.io/t/po-util-a-toolchain-installer-helper-for-l
 <img src="http://i.giphy.com/11w4YEQHmUy06s.gif" width="800px">
 </p>
 
-  * Standardized project directory structure.
-  * Upgrading the system firmware of devices.
-  * Monitoring the serial output of devices.
-  * Manually putting devices into DFU mode and out of DFU mode.
-
-# Project Directory Structure
+# Project Structure
 
 The directory structure of a **full** `po-util` project is arranged like so:
 
