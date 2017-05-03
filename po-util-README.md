@@ -10,7 +10,7 @@
    ███████/   ██████/           ██████/     ████/  ██/ ██/
    ██ |
    ██ |
-   ██/                               https://po-util.com
+   ██/                https://nrobinson2000.github.io/po-util/
 ```
 
 This directory is set up as a po-util project.
