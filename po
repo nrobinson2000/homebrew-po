@@ -188,6 +188,39 @@ build_message()
 
 dfu_open()
 {
+DFU_LIST="$(dfu-util -l)"
+echo "$DFU_LIST" > dfu-list.txt
+DFU_LIST='dfu-list.txt'
+
+if grep "2b04:d006" "$DFU_LIST" > /dev/null || grep "2b04:d008" "$DFU_LIST" > /dev/null || grep "2b04:d00a" "$DFU_LIST" > /dev/null || grep "1d50:607f" "$DFU_LIST" > /dev/null ||  grep "1d50:607f" "$DFU_LIST" > /dev/null ;
+then
+  blue_echo "
+Already found a device in DFU mode!
+"
+  rm "$DFU_LIST"
+  return
+fi
+
+if [ "$1" == "-d" ] || [ "$1" == "--device" ];
+then
+
+  if stty -f "$2" > /dev/null 2>&1; # Check if serial port is avaliable
+  then
+  blue_echo "
+Placing device $2 into DFU mode...
+"
+  stty -f "$2" "$DFUBAUDRATE" > /dev/null
+  return
+
+else
+  red_echo "
+Could not find a device on $2
+  "
+  fi
+
+  return
+fi
+
     if [ "$DEVICE_TYPE" == "duo" ];
     then
         if [ "$MODEM_DUO" != "" ];
@@ -247,17 +280,6 @@ common_commands() #List common commands
 
 build_firmware()
 {
-
-    #Temporary fix for http://community.particle.io/t/stm32-usb-otg-driver-error-on-v0-6-0/26814
-    # STRING='CPPSRC += $(call target_files,$(BOOTLOADER_MODULE_PATH)/../hal/src/stm32/,newlib.cpp)'
-    # echo "$STRING" >> "$FIRMWARE_PARTICLE/firmware/bootloader/src/electron/sources.mk"
-    # sed "126s/.*/#define USB_OTG_MAX_TX_FIFOS (4*2)/" "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h" > temp.particle
-    # sed "132s/.*/#define USB_OTG_MAX_TX_FIFOS (6*2)/" temp.particle > temp.particle.1
-    # rm -f "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
-    # mv temp.particle.1 "$FIRMWARE_PARTICLE/firmware/platform/MCU/STM32F2xx/SPARK_Firmware_Driver/inc/platform_config.h"
-    # rm -f temp.particle
-    # FIXED in release/v0.6.1-rc.1
-
     if [ "$DEVICE_TYPE" == "duo" ];
     then
         # RedBear DUO
@@ -472,7 +494,6 @@ fi
 
 }
 
-
 addLib()
 {
 
@@ -608,7 +629,7 @@ BRANCH_DUO="duo"
 BINDIR=~/bin            # be
 DFUBAUDRATE=19200       # changed in the "~/.po" file.
 CWD="$(pwd)" # Global Current Working Directory variable
-MODEM="$(ls -1 /dev/cu.* | grep -vi bluetooth | tail -1)"
+MODEM="$(ls -1 /dev/cu.* | grep "usbmodem" | tail -1)"
 MODEM_DUO="$(ls -1 /dev/* | grep "usbmodem" | tail -1)"
 
 if [ "$1" == "config" ];
@@ -872,10 +893,28 @@ This bug will hopefully be fixed in a later release."
     exit
 fi
 
+# List devices aviable over serial
+if [ "$1" == "dfu-list" ];
+then
+  blue_echo "
+Found the following Particle Devices:
+"
+  ls -1 /dev/cu.* | grep "usbmodem"
+
+# blue_echo "
+# Found the following RedBear Devices:
+# "
+#
+# ls -1 /dev/* | grep "usbmodem"
+
+  echo
+  exit
+fi
+
 # Put device into DFU mode
 if [ "$1" == "dfu-open" ];
 then
-    dfu_open
+    dfu_open "$2" "$3"
     exit
 fi
 
@@ -1541,12 +1580,12 @@ or choose a proper command."
 fi
 if [ "$DEVICE_TYPE" == "photon" ];
 then
-  DFU_ADDRESS1="2b04:D006"
+  DFU_ADDRESS1="2b04:d006"
   DFU_ADDRESS2="0x080A0000"
 fi
 if [ "$DEVICE_TYPE" == "P1" ];
 then
-  DFU_ADDRESS1="2b04:D008"
+  DFU_ADDRESS1="2b04:d008"
   DFU_ADDRESS2="0x080A0000"
 fi
 if [ "$DEVICE_TYPE" == "electron" ];
