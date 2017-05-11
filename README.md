@@ -134,10 +134,10 @@ command to create a project directory.
 
 ### Building Firmware
 
-To compile firmware, simply run `po DEVICE build`, substituting `DEVICE` for
+To compile firmware, simply run `po DEVICE_TYPE build`, substituting `DEVICE_TYPE` for
 `photon`, `P1`, or `electron`. To compile and flash firmware to your device
-using dfu-util, simply run `po DEVICE flash`. To clean the project, run `po
-DEVICE clean`.
+using dfu-util, simply run `po DEVICE_TYPE flash`. To clean the project, run `po
+DEVICE_TYPE clean`.
 
 <p align="center">
 <img src="http://i.giphy.com/V6LteSojfcxKE.gif" width="800px">
@@ -145,7 +145,7 @@ DEVICE clean`.
 
 ### DFU Commands
 
-To upload precompiled code over USB, run `po DEVICE dfu`. To put your device
+To upload precompiled code over USB, run `po DEVICE_TYPE dfu`. To put your device
 into dfu mode, run `po dfu-open`. To get your device out of dfu mode, run `po
 dfu-close`.
 
@@ -155,13 +155,13 @@ dfu-close`.
 
 ### Over The Air (OTA) Uploading
 
-To upload precompiled code over the air using particle-cli, run `po DEVICE ota
+To upload precompiled code over the air using particle-cli, run `po DEVICE_TYPE ota
 DEVICE_NAME`, where `DEVICE_NAME` is the name of your device in the Particle
 cloud. You must be logged into particle-cli to use this feature. You can log
 into particle-cli with `particle cloud login`.
 
 You can also flash code to multiple devices at once by passing the `-m` or
-`--multi` argument to `ota`. This would look like `po DEVICE ota -m`. This
+`--multi` argument to `ota`. This would look like `po DEVICE_TYPE ota -m`. This
 relies on a file called `devices.txt` that you must create in your `po-util`
 project directory.
 
@@ -175,7 +175,7 @@ project directory.
 
 By default, `po-util` changes the trigger DFU Mode baud rate to `19200`, as it
 is a more friendly baud rate for Linux Distributions. To make your device(s)
-recognize this baud rate, you must run `po DEVICE upgrade`. This will also
+recognize this baud rate, you must run `po DEVICE_TYPE upgrade`. This will also
 update the system firmware on your device(s).
 
 If you wish to use the default Particle DFU Mode baud rate, you may change the
