@@ -470,7 +470,6 @@ fi
       git clone "${GIT_ARGS[0]}" "${GIT_ARGS[1]}" || ( echo ; red_echo "Could not download Library.  Please supply a valid URL to a git repository." )
     fi
 
-
     else
       echo
       blue_echo "Attempting to download $LIB_QUERY using Particle Libraries 2.0..."
@@ -952,7 +951,6 @@ then
         echo
         exit
     fi
-
 
     #update both and everything else if not specified
 
@@ -1531,7 +1529,6 @@ else
 fi
 
 fi
-
 
 fi
 

@@ -111,8 +111,21 @@ Example:
 dfu
 
 .TP
+.B dfu-list
+List devices on serial ports.
+
+.TP
 .B dfu-open
-Put device into DFU mode.
+Put a device into DFU mode.
+
+You can specify a device with
+.B -d
+
+Example:
+
+.B po
+dfu-open -d /dev/cu.usbmodem1441
+
 
 .TP
 .B dfu-close
