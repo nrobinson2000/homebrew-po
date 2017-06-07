@@ -8,7 +8,6 @@ class Po < Formula
   def install
     bin.install 'po'
     man1.install 'man/po.1'
-    system "po", "install"
   end
 
   def caveats; <<-EOS.undent
