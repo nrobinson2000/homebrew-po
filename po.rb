@@ -20,5 +20,4 @@ class Po < Formula
 
   EOS
   end
-
 end
