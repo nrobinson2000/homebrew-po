@@ -1,5 +1,5 @@
 class Po < Formula
-  desc "Particle Offline Utility: The Ultimate Local Particle Experience for Linux and macOS"
+  desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-po', :using => :git
   url 'https://github.com/nrobinson2000/homebrew-po/archive/79.0.tar.gz'
