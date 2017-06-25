@@ -30,7 +30,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Helper functions
-function pause()
+pause()
 {
     read -rp "$*"
 }
@@ -794,18 +794,18 @@ source "$SETTINGS"
 
 if [ "$1" == "info" ];
 then
-  echo
-  echo "$(tput bold)$(tput setaf 3)$(date)$(tput sgr0)"
-  echo
-  echo "$(tput bold)Configured Settings:$(tput sgr0)"
-  echo
-  echo "$(tput bold)Firmware Branches:$(tput sgr0)"
-  echo "$(tput bold)Particle: $(tput setaf 6)$BRANCH$(tput sgr0)"
-  echo "$(tput bold)Duo: $(tput setaf 6)$BRANCH_DUO$(tput sgr0)"
-  echo
-  echo "$(tput bold)DFU Baud Rate: $(tput setaf 6)$DFUBAUDRATE$(tput sgr0)"
-  echo "$(tput bold)Automatic Headers: $(tput setaf 6)$AUTO_HEADER$(tput sgr0)"
-  echo
+  echo "
+$(tput bold)$(tput setaf 3)$(date)$(tput sgr0)
+
+$(tput bold)Configured Settings:$(tput sgr0)
+
+$(tput bold)Firmware Branches:$(tput sgr0)
+$(tput bold)Particle: $(tput setaf 6)$BRANCH$(tput sgr0)
+$(tput bold)Duo: $(tput setaf 6)$BRANCH_DUO$(tput sgr0)
+
+$(tput bold)DFU Baud Rate: $(tput setaf 6)$DFUBAUDRATE$(tput sgr0)
+$(tput bold)Automatic Headers: $(tput setaf 6)$AUTO_HEADER$(tput sgr0)
+"
   exit
 fi
 
@@ -916,20 +916,25 @@ This bug will hopefully be fixed in a later release."
 fi
 
 # List devices aviable over serial
-if [ "$1" == "dfu-list" ];
+if [ "$1" == "list" ] || [ "$1" == "ls" ];
 then
   blue_echo "
 Found the following Particle Devices:
 "
-  ls -1 /dev/cu.* | grep "usbmodem"
 
-# blue_echo "
-# Found the following RedBear Devices:
-# "
-#
-# ls -1 /dev/* | grep "usbmodem"
+RAW_LOG="$(system_profiler SPUSBDataType)"
 
-  echo
+  for device in $(ls -1 /dev/cu.* | grep "usbmodem");
+  do
+    LOCATION=$(echo "$device" | tail -c +17)
+    LOCATION=${LOCATION%?}
+    LOCNUM=$(echo "$RAW_LOG" | sed -n "/$LOCATION/=")
+    DEVNUM=$(($LOCNUM-8))
+    PLATFORM=$(echo "$RAW_LOG" | sed "$DEVNUM!d")
+    PLATFORM=$(echo $PLATFORM | xargs)
+    echo "$(tput bold)$(tput setaf 3)$PLATFORM$(tput sgr0) $device
+    "
+  done
   exit
 fi
 
