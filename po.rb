@@ -2,13 +2,13 @@ class Po < Formula
   desc "Particle Offline Utility: The Ultimate Local Particle Experience"
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-po', :using => :git
-  url 'https://github.com/nrobinson2000/homebrew-po/archive/95.0.tar.gz'
+  url 'https://github.com/nrobinson2000/homebrew-po/archive/96.0.tar.gz'
   sha256 '5651f15e8f78e8fab2ea777af787d27a75a90142dc6051746a64e0a515fd9fdf'
 
   def install
     bin.install 'po'
     man1.install 'man/po.1'
-    bash_completion.install "completion/po-util.bash_completion"
+    bash_completion.install "completion/po"
   end
 
   def caveats; <<-EOS.undent
