@@ -8,6 +8,7 @@ class Po < Formula
   def install
     bin.install 'po'
     man1.install 'man/po.1'
+    bash_completion.install "po-util.bash_completion"
   end
 
   def caveats; <<-EOS.undent

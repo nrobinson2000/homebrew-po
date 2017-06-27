@@ -1025,7 +1025,7 @@ then
         DIRWARNING="true"
         find_objects "$3"
 
-        for file in $(cd $FIRMWAREDIR && ls -d1 */);
+        for file in $(cd $FIRMWAREDIR && ls -d1 */ 2>/dev/null);
         do
             file_base="${file%/}"
 
@@ -1695,7 +1695,7 @@ else
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
-    
+
   pause "Connect your device and put into DFU mode. Press [ENTER] to continue..."
   cd "$CWD" || exit
   sed "2s/.*/START_DFU_FLASHER_SERIAL_SPEED=$DFUBAUDRATE/" "$FIRMWARE_DUO/firmware/build/module-defaults.mk" > temp.particle
