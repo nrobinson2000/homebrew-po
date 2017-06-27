@@ -93,6 +93,10 @@ _po-util()
           COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- ${cur}) )
           return 0
 
+      elif [[ ${prev} == "purge" ]]; then
+        COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- ${cur}) )
+        return 0
+
         elif [[ ${prev} == "dfu-open" ]]; then
           COMPREPLY=( $(compgen -W "-d" -- ${cur}) )
           return 0
