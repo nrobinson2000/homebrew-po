@@ -840,9 +840,9 @@ then
   [ -d "$FIRMWARE_DUO" ] || mkdir -p "$FIRMWARE_DUO"  # If FIRMWARE_DUO does not exist, create it
 
   # Enable bash completion
-  echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
-  echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bash_profile"
-  echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bashrc"
+  grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
+  grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bash_profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bash_profile"
+  grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.bashrc" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.bashrc"
 
   # clone Particle firmware repository
   cd "$FIRMWARE_PARTICLE" || exit
