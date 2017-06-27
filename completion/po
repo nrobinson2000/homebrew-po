@@ -78,6 +78,10 @@ _po-util()
         COMPREPLY=( $(compgen -d -- ${cur}) )
         return 0
 
+    elif [[ ${prev} == "view-headers" ]]; then
+      COMPREPLY=( $(compgen -d -- ${cur}) )
+      return 0
+
     elif [[ ${prev} == "library" ]] || [[ ${prev} == "lib" ]]; then
         COMPREPLY=( $(compgen -W "${library}" -- ${cur}) )
         return 0
