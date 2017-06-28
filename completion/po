@@ -50,8 +50,8 @@ _po-util()
 
     examples="ls list load copy"
 
-  if [[ ${prev} == "$script" ]]; then
-      COMPREPLY=( $(compgen -W "${primary}" -- ${cur}) )
+    if [[ "${COMP_CWORD}" == 1 ]]; then
+      COMPREPLY=($(compgen -W "$primary" -- "$cur"))
       return 0
 
     elif ( [[ ${preprev} == "init" ]] && ( [[ ${prev} == "photon" ]] || [[ ${prev} == "electron" ]] || [[ ${prev} == "P1" ]] || [[ ${prev} == "pi" ]] || [[ ${prev} == "duo" ]] || [[ ${prev} == "core" ]] )  ) || ( [[ ${prev} == "init" ]] && [[ -z "${platforms##*$preprev*}" ]] ) ;  then
