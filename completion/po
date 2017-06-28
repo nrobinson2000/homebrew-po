@@ -17,8 +17,6 @@
 # Copyright (C) 2017  Nathan Robinson
 #
 
-script="po"
-
 getModems()
 {
   if [ "$(uname -s)" == "Linux" ]; then
@@ -121,4 +119,4 @@ _po-util()
       fi
 }
 
-complete -F _po-util "$script"
+complete -F _po-util po
