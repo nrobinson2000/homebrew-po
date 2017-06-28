@@ -1,5 +1,5 @@
-sudo: true
-language: objective-c
+os: osx
+language: bash
 before_install:
   - brew update
 install:
