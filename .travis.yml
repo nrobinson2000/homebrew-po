@@ -1,18 +1,20 @@
-os:
-  - osx
-
-script:
+sudo: true
+language: objective-c
+before_install:
+  - brew update
+install:
   - brew tap nrobinson2000/po
   - brew install po
   - ./config-expect.sh
   - po install
-  - mkdir test && cd test && po init
-  - time po photon build
-  - time po electron clean
-  - time po electron build
-  - time po P1 clean
-  - time po P1 build
-  - time po core clean
-  - time po core build
-  - time po duo clean
-  - time po duo build
+script:
+  - po init test
+  - po photon build
+  - po electron clean
+  - po electron build
+  - po P1 clean
+  - po P1 build
+  - po core clean
+  - po core build
+  - po duo clean
+  - po duo build
