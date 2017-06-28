@@ -9,6 +9,7 @@ install:
   - po install
 script:
   - po init test
+  - cd test
   - po photon build
   - po electron clean
   - po electron build
