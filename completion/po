@@ -31,10 +31,10 @@ _po-util()
 {
     local cur prev preprev prepreprev primary device platforms library examples
     COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    preprev="${COMP_WORDS[COMP_CWORD-2]}"
-    prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
+    cur="$COMP_WORDS[COMP_CWORD]"
+    prev="$COMP_WORDS[COMP_CWORD-1]"
+    preprev="$COMP_WORDS[COMP_CWORD-2]"
+    prepreprev="$COMP_WORDS[COMP_CWORD-3]"
 
     primary="photon electron P1 pi duo core help setup-atom config info install init serial list ls
     dfu-open dfu-close update library lib"
@@ -48,74 +48,73 @@ _po-util()
 
     examples="ls list load copy"
 
-    if [[ "${COMP_CWORD}" == 1 ]]; then
+    if [[ "$COMP_CWORD" == 1 ]]; then
       COMPREPLY=($(compgen -W "$primary" -- "$cur"))
       return 0
 
-    elif ( [[ ${preprev} == "init" ]] && ( [[ ${prev} == "photon" ]] || [[ ${prev} == "electron" ]] || [[ ${prev} == "P1" ]] || [[ ${prev} == "pi" ]] || [[ ${prev} == "duo" ]] || [[ ${prev} == "core" ]] )  ) || ( [[ ${prev} == "init" ]] && [[ -z "${platforms##*$preprev*}" ]] ) ;  then
-      COMPREPLY=( $(compgen -d -- ${cur}) )
+    elif ( [[ $preprev == "init" ]] && ( [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]] )  ) || ( [[ $prev == "init" ]] && [[ -z "$platforms##*$preprev*" ]] ) ;  then
+      COMPREPLY=( $(compgen -d -- $cur) )
       return 0
 
-    elif [[ ${prev} == "init" ]]; then
-      COMPREPLY=( $(compgen -W "${platforms}" -- ${cur}) )
+    elif [[ $prev == "init" ]]; then
+      COMPREPLY=( $(compgen -W "$platforms" -- $cur) )
       return 0
 
-    elif [[ ${prev} == "install" ]] && [[ ${preprev} == "$script" ]]; then
-      COMPREPLY=( $(compgen -d -- ${cur}) )
+    elif [[ $prev == "install" ]] && [[ $preprev == "po" ]]; then
+      COMPREPLY=( $(compgen -d -- $cur) )
       return 0
 
-    elif [[ ${preprev} == "install" ]] && [[ ${prepreprev} == "$script" ]]; then
-      COMPREPLY=( $(compgen -W "basic" -- ${cur}) )
+    elif [[ $preprev == "install" ]] && [[ $prepreprev == "po" ]]; then
+      COMPREPLY=( $(compgen -W "basic" -- $cur) )
       return 0
 
-    elif [[ ${prev} == "photon" ]] || [[ ${prev} == "electron" ]] || [[ ${prev} == "P1" ]] || [[ ${prev} == "pi" ]] || [[ ${prev} == "duo" ]] || [[ ${prev} == "core" ]]; then
-      COMPREPLY=( $(compgen -W "${device}" -- ${cur}) )
+    elif [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]]; then
+      COMPREPLY=( $(compgen -W "$device" -- $cur) )
       return 0
 
-   elif [[ ${prev} == "build" ]] || [[ ${prev} == "flash" ]] || [[ ${prev} == "clean" ]] || [[ ${prev} == "dfu" ]] || [[ ${prev} == "ota" ]]; then
-        COMPREPLY=( $(compgen -d -- ${cur}) )
+   elif [[ $prev == "build" ]] || [[ $prev == "flash" ]] || [[ $prev == "clean" ]] || [[ $prev == "dfu" ]] || [[ $prev == "ota" ]]; then
+        COMPREPLY=( $(compgen -d -- $cur) )
         return 0
 
-    elif [[ ${prev} == "view-headers" ]]; then
-      COMPREPLY=( $(compgen -d -- ${cur}) )
+    elif [[ $prev == "view-headers" ]]; then
+      COMPREPLY=( $(compgen -d -- $cur) )
       return 0
 
-    elif [[ ${prev} == "library" ]] || [[ ${prev} == "lib" ]]; then
-        COMPREPLY=( $(compgen -W "${library}" -- ${cur}) )
+    elif [[ $prev == "library" ]] || [[ $prev == "lib" ]]; then
+        COMPREPLY=( $(compgen -W "$library" -- $cur) )
         return 0
 
-    elif [[ ${preprev} == "clean" ]] && ( [[ ${prepreprev} == "library" ]] || [[ ${prepreprev} == "lib" ]]  ) ; then
-      COMPREPLY=( $(compgen -W "-f" -- ${cur}) )
+    elif [[ $preprev == "clean" ]] && ( [[ $prepreprev == "library" ]] || [[ $prepreprev == "lib" ]]  ) ; then
+      COMPREPLY=( $(compgen -W "-f" -- $cur) )
 
-    elif [[ ${prev} == "examples" ]] || [[ ${prev} == "ex" ]]; then
-        COMPREPLY=( $(compgen -W "${examples}" -- ${cur}) )
+    elif [[ $prev == "examples" ]] || [[ $prev == "ex" ]]; then
+        COMPREPLY=( $(compgen -W "$examples" -- $cur) )
         return 0
 
-      elif ( [[ ${preprev} == "ex" ]] || [[ ${preprev} == "examples" ]] ) && ( [[ ${prev} == "ls" ]] || [[ ${prev} == "list" ]] ); then
-          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- ${cur}) )
+      elif ( [[ $preprev == "ex" ]] || [[ $preprev == "examples" ]] ) && ( [[ $prev == "ls" ]] || [[ $prev == "list" ]] ); then
+          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
           return 0
 
-      elif [[ ${prev} == "purge" ]]; then
-        COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- ${cur}) )
+      elif [[ $prev == "purge" ]]; then
+        COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
         return 0
 
-        elif [[ ${prev} == "dfu-open" ]]; then
-          COMPREPLY=( $(compgen -W "-d" -- ${cur}) )
+        elif [[ $prev == "dfu-open" ]]; then
+          COMPREPLY=( $(compgen -W "-d" -- $cur) )
           return 0
 
-        elif [[ ${prev} == "-d" ]]; then
-          COMPREPLY=( $(compgen -W "$(getModems)" -- ${cur}) )
+        elif [[ $prev == "-d" ]]; then
+          COMPREPLY=( $(compgen -W "$(getModems)" -- $cur) )
           return 0
 
 
-        elif [[ ${prev} == "add" ]] || [[ ${prev} == "import" ]]; then
-          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- ${cur}) )
+        elif [[ $prev == "add" ]] || [[ $prev == "import" ]]; then
+          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
           return 0
 
-        elif [[ ${prev} == "rm" ]] || [[ ${prev} == "remove" ]] ; then
-          COMPREPLY=( $(compgen -W "$(po get-added-libs)" -- ${cur}) )
+        elif [[ $prev == "rm" ]] || [[ $prev == "remove" ]] ; then
+          COMPREPLY=( $(compgen -W "$(po get-added-libs)" -- $cur) )
           return 0
-
       fi
 }
 
