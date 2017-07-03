@@ -31,10 +31,10 @@ _po-util()
 {
     local cur prev preprev prepreprev primary device platforms library examples
     COMPREPLY=()
-    cur="$COMP_WORDS[COMP_CWORD]"
-    prev="$COMP_WORDS[COMP_CWORD-1]"
-    preprev="$COMP_WORDS[COMP_CWORD-2]"
-    prepreprev="$COMP_WORDS[COMP_CWORD-3]"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    preprev="${COMP_WORDS[COMP_CWORD-2]}"
+    prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
 
     primary="photon electron P1 pi duo core help setup-atom config info install init serial list ls
     dfu-open dfu-close update library lib"
