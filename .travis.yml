@@ -1,7 +1,7 @@
 os: osx
 language: bash
 before_install:
-  - brew install docker docker-machine
+  - brew install docker docker-machine virtualbox
   - docker-machine create main
   - eval $(docker-machine env main)
 install:
