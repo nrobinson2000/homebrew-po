@@ -1,7 +1,7 @@
 os: osx
 language: bash
 before_install:
-  - ./get-docker.sh
+  - bash get-docker.sh
 install:
   - brew tap nrobinson2000/po
   - brew install po
