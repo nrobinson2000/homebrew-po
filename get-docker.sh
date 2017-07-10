@@ -1,3 +1,3 @@
 #!/bin/bash
 
-brew install Caskroom/cask/dockertoolbox
+brew cask install dockertoolbox
