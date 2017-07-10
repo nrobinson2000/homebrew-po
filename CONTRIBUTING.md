@@ -8,6 +8,7 @@ Whenever possible, please follow these guidelines for contributions:
 - Familiarize yourself with the code base, and follow the formatting principles adhered to in the surrounding code.
 - Wherever possible, test your contributions.
 - If the changes have an impact on developers, then those changes should be described in the documentation.
+- If you are adding a new feature please make an effort to add it to both the Linux and macOS versions of po-util.
 
 # Introduction to the po-util code base:
 
@@ -29,3 +30,4 @@ Whenever possible, please follow these guidelines for contributions:
 
 - Please use [Shellcheck](https://www.shellcheck.net/) to test your contributions.
 - All variables must be in `UPPER_CAMEL_CASE`
+- Your contributions must be compatible with older versions of bash. On macOS Sierra bash `3.2.57(1)-release` is installed by default and your contributions must operate correctly.
