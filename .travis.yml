@@ -2,6 +2,7 @@ os: osx
 language: bash
 before_install:
   - brew cask install docker-toolbox
+  - eval "$(docker-machine env default)"
 install:
   - brew tap nrobinson2000/po
   - brew install po
