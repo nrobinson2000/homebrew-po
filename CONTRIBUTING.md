@@ -24,3 +24,8 @@ Whenever possible, please follow these guidelines for contributions:
 [`man/po.1`](https://github.com/nrobinson2000/homebrew-po/blob/master/man/po.1) - The man page for `po`
 
 [`po.rb`](https://github.com/nrobinson2000/homebrew-po/blob/master/po.rb) - The Homebrew formula for installing `po`
+
+# Conventions:
+
+- Please use [Shellcheck](https://www.shellcheck.net/) to test your contributions.
+- All variables must be in `UPPER_CAMEL_CASE`
