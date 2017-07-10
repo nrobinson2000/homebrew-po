@@ -1,15 +1,12 @@
 os: osx
 language: bash
-#before_install:
-#  - brew update
 install:
   - brew tap nrobinson2000/po
   - brew install po
   - ./config-expect.sh
   - po install
 script:
-  - po init test
-  - cd test
+  - po init test && cd test
   - po photon build
   - po electron clean
   - po electron build
@@ -19,3 +16,5 @@ script:
   - po core build
   - po duo clean
   - po duo build
+  - po pi clean
+  - po pi build
