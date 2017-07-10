@@ -1,4 +1,4 @@
-# Contributing to po-util
+# Contributing to po-util:
 
 First off, thank you for considering contributing to po-util. It's people like you that make po-util such a great tool.
 
@@ -9,7 +9,7 @@ Whenever possible, please follow these guidelines for contributions:
 - Wherever possible, test your contributions.
 - If the changes have an impact on developers, then those changes should be described in the documentation.
 
-# Introduction to the po-util codebase:
+# Introduction to the po-util code base:
 
 >**You are currently viewing the macOS version of po-util.**
 >
