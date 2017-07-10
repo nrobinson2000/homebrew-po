@@ -12,6 +12,7 @@ Whenever possible, please follow these guidelines for contributions:
 # Introduction to the po-util codebase:
 
 >**You are currently viewing the macOS version of po-util.**
+>
 >**The Linux version can be found over at [nrobinson2000/po-util](https://github.com/nrobinson2000/po-util).**
 
 --------
