@@ -102,7 +102,7 @@ Select Particle firmware branch and DFU trigger baud rate.
 Get a device's ID and connect it Wi-Fi. Manually claim it after.
 
 .TP
-.B ls | list
+.B ls, list
 List devices on serial ports.
 
 .TP
@@ -133,7 +133,7 @@ dfu-open -d /dev/cu.usbmodem1441
 Get device out of DFU mode.
 
 .TP
-.B lib | library
+.B lib, library
 Library manager command for po-util.
 
 .SH LIBRARY MANAGER
@@ -149,7 +149,7 @@ file in every project. More features which are listed below.
 .SH OPTIONS
 
 .TP
-.B get | install
+.B get, install
 Download a Particle Library with Git and optionally name it. If run with no arguments, libraries listed in "libs.txt" are installed.
 
 Example of downloading a library from GitHub:
@@ -158,7 +158,7 @@ Example of downloading a library from GitHub:
 get https://github.com/someUser/libraryName libraryName
 
 .TP
-.B add | import
+.B add, import
 Add a downloaded library to a po-util project. Libraries are added in the firmware directory as soft links. Additionally, the library information is added to "libs.txt" so that you can keep track of your libraries and restore them in the future.
 
 Example adding an installed library to a project:
@@ -167,7 +167,7 @@ Example adding an installed library to a project:
 add libraryName
 
 .TP
-.B rm | remove
+.B rm, remove
 Remove a library from a po-util project. Just the soft links are deleted.
 
 Example:
@@ -197,13 +197,13 @@ Example:
 purge someLibrary
 
 .TP
-.B ls | list
+.B ls, list
 List all downloaded libraries. Libraries are kept in:
 
 .B ~/.po-util/lib
 
 .TP
-.B src | source
+.B src, source
 List all downloaded libraries that are repositories and include their Git URL's.
 
 .TP
@@ -220,7 +220,7 @@ Libraries listed in "libs.txt" are installed and symlinks are created.
 All symlinks in the project are removed, but "libs.txt" is untouched.  This is ideal for releasing you project, as there will be no linked libraries in the "firmware" directory, but rather a list that people can run "po lib setup" to download your project's dependencies.
 
 .TP
-.B pack | package | export
+.B pack, package, export
 Copy your source code and linked libraries in "firmware" into a packaged directory inside of your project.  A tarball of the packaged directory is also created.  A useful method for sharing your project with users who do not have po-util.
 
 NOTE:
@@ -231,7 +231,7 @@ If you are building for Raspberry Pi, Docker will not follow the symlinked files
 .B po pi build <PROJECT>-packaged
 
 .TP
-.B update | refresh
+.B update, refresh
 Update your (git) libraries.
 
 .TP
@@ -239,7 +239,7 @@ Update your (git) libraries.
 View any dependencies included libraries may have.
 
 .TP
-.B ex | examples
+.B ex, examples
 Library example manager.  Can be used to list available examples for a library and load them into a project.
 
 .SH LIBRARY EXAMPLE MANAGER
@@ -249,7 +249,7 @@ Library example manager.  Can be used to list available examples for a library a
 A work in progress.  The Library Example Manger allows you to find examples in a library and load them into your project for testing or modification.  Your original source code is backed up in the "main.cpp.YYYY-MM-DD-HH-mm.txt" format.  A "libs.txt" will be generated from the example upon loading.
 
 .TP
-.B ls | list
+.B ls, list
 List all examples in a Library.
 
 Example:

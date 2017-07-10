@@ -15,7 +15,6 @@
 
 #  po-util - The Ultimate Local Particle Experience for Linux and macOS
 # Copyright (C) 2017  Nathan Robinson
-#
 
 getModems()
 {
@@ -32,9 +31,19 @@ _po-util()
     local cur prev preprev prepreprev primary device platforms library examples
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    preprev="${COMP_WORDS[COMP_CWORD-2]}"
-    prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
+
+    if [[ "$COMP_CWORD" -lt 2 ]]; then
+      prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    elif [[ "$COMP_CWORD" -lt 3 ]]; then
+      prev="${COMP_WORDS[COMP_CWORD-1]}"
+      preprev="${COMP_WORDS[COMP_CWORD-2]}"
+
+    elif [[ "$COMP_CWORD" -lt 4 ]]; then
+      prev="${COMP_WORDS[COMP_CWORD-1]}"
+      preprev="${COMP_WORDS[COMP_CWORD-2]}"
+      prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
+    fi
 
     primary="photon electron P1 pi duo core help setup-atom config info install init serial list ls
     dfu-open dfu-close update library lib"
@@ -106,7 +115,6 @@ _po-util()
         elif [[ $prev == "-d" ]]; then
           COMPREPLY=( $(compgen -W "$(getModems)" -- $cur) )
           return 0
-
 
         elif [[ $prev == "add" ]] || [[ $prev == "import" ]]; then
           COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
