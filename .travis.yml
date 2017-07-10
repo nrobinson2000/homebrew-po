@@ -1,13 +1,14 @@
 os: osx
 language: bash
 before_install:
-  - bash get-docker.sh
+  - brew cask install docker-toolbox
 install:
   - brew tap nrobinson2000/po
   - brew install po
   - ./config-expect.sh
   - po install
 script:
+  - docker ps
   - po init test && cd test
   - po photon build
   - po electron clean
