@@ -6,7 +6,6 @@ install:
   - ./config-expect.sh
   - po install
 script:
-  - docker ps
   - po init test && cd test
   - po photon build
   - po electron clean
