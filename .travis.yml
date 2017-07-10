@@ -1,9 +1,5 @@
 os: osx
 language: bash
-before_install:
-  - brew install docker docker-machine virtualbox
-  - docker-machine create main
-  - eval $(docker-machine env main)
 install:
   - brew tap nrobinson2000/po
   - brew install po
@@ -21,5 +17,3 @@ script:
   - po core build
   - po duo clean
   - po duo build
-  - po pi clean
-  - po pi build
