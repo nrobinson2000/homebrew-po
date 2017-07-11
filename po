@@ -1028,7 +1028,7 @@ then
     brew update
     brew upgrade po
     echo
-    curl -s https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
+    curl -s https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
     exit
 fi
 
