@@ -885,7 +885,7 @@ then
     blue_echo "Installing particle-cli..."
     sudo npm install -g --unsafe-perm node-pre-gyp npm serialport particle-cli
 
-    curl -s https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
+    curl -sS https://po-util-tracker.herokuapp.com/install/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
 
     green_echo "
     Thank you for installing po-util. Be sure to check out https://po-util.com
@@ -1028,7 +1028,7 @@ then
     brew update
     brew upgrade po
     echo
-    curl -s https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
+    curl -sS https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$(uname -s)/$(curl -sS ipecho.net/plain) > /dev/null
     exit
 fi
 
