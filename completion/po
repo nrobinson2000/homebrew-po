@@ -39,7 +39,7 @@ _po-util()
       prev="${COMP_WORDS[COMP_CWORD-1]}"
       preprev="${COMP_WORDS[COMP_CWORD-2]}"
 
-    elif [[ "$COMP_CWORD" -lt 4 ]]; then
+    elif [[ "$COMP_CWORD" -ge 3 ]]; then
       prev="${COMP_WORDS[COMP_CWORD-1]}"
       preprev="${COMP_WORDS[COMP_CWORD-2]}"
       prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
@@ -82,48 +82,57 @@ _po-util()
       return 0
 
    elif [[ $prev == "build" ]] || [[ $prev == "flash" ]] || [[ $prev == "clean" ]] || [[ $prev == "dfu" ]] || [[ $prev == "ota" ]]; then
-        COMPREPLY=( $(compgen -d -- $cur) )
-        return 0
+      COMPREPLY=( $(compgen -d -- $cur) )
+      return 0
 
     elif [[ $prev == "view-headers" ]]; then
       COMPREPLY=( $(compgen -d -- $cur) )
       return 0
 
     elif [[ $prev == "library" ]] || [[ $prev == "lib" ]]; then
-        COMPREPLY=( $(compgen -W "$library" -- $cur) )
-        return 0
+      COMPREPLY=( $(compgen -W "$library" -- $cur) )
+      return 0
 
     elif [[ $preprev == "clean" ]] && ( [[ $prepreprev == "library" ]] || [[ $prepreprev == "lib" ]]  ) ; then
       COMPREPLY=( $(compgen -W "-f" -- $cur) )
+      return 0
 
     elif [[ $prev == "examples" ]] || [[ $prev == "ex" ]]; then
         COMPREPLY=( $(compgen -W "$examples" -- $cur) )
         return 0
 
-      elif ( [[ $preprev == "ex" ]] || [[ $preprev == "examples" ]] ) && ( [[ $prev == "ls" ]] || [[ $prev == "list" ]] ); then
-          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
-          return 0
-
-      elif [[ $prev == "purge" ]]; then
+    elif  [[ $prev == "ls" ]] || [[ $prev == "list" ]] && [[ "$COMP_CWORD" == 4 ]] ; then
         COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
         return 0
 
-        elif [[ $prev == "dfu-open" ]]; then
-          COMPREPLY=( $(compgen -W "-d" -- $cur) )
-          return 0
+    elif  [[ $prev == "copy" ]] || [[ $prev == "load" ]] && [[ "$COMP_CWORD" == 4 ]] ; then
+      COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
+      return 0
 
-        elif [[ $prev == "-d" ]]; then
-          COMPREPLY=( $(compgen -W "$(getModems)" -- $cur) )
-          return 0
+    elif  [[ $preprev == "copy" ]] || [[ $preprev == "load" ]] && [[ "$COMP_CWORD" == 5 ]] ; then
+      COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib/$prev/examples)" -- $cur) )
+      return 0
 
-        elif [[ $prev == "add" ]] || [[ $prev == "import" ]]; then
-          COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
-          return 0
+    elif [[ $prev == "purge" ]]; then
+      COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
+      return 0
 
-        elif [[ $prev == "rm" ]] || [[ $prev == "remove" ]] ; then
-          COMPREPLY=( $(compgen -W "$(po get-added-libs)" -- $cur) )
-          return 0
-      fi
+    elif [[ $prev == "dfu-open" ]] && [[ "$COMP_CWORD" == 2 ]]; then
+      COMPREPLY=( $(compgen -W "-d" -- $cur) )
+      return 0
+
+    elif [[ $prev == "-d" ]]; then
+      COMPREPLY=( $(compgen -W "$(getModems)" -- $cur) )
+      return 0
+
+    elif [[ $prev == "add" ]] || [[ $prev == "import" ]]; then
+      COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
+      return 0
+
+    elif [[ $prev == "rm" ]] || [[ $prev == "remove" ]] ; then
+      COMPREPLY=( $(compgen -W "$(po get-added-libs)" -- $cur) )
+      return 0
+    fi
 }
 
 complete -F _po-util po
