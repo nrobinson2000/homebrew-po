@@ -396,7 +396,6 @@ config()
   echo FIRMWARE_PARTICLE="$FIRMWARE_PARTICLE" >> $SETTINGS
   echo FIRMWARE_DUO="$FIRMWARE_DUO" >> $SETTINGS
   echo "export PARTICLE_DEVELOP=1" >> $SETTINGS
-  echo BINDIR="$BINDIR" >> $SETTINGS
 
   # Particle
   echo
@@ -741,7 +740,6 @@ FIRMWARE_PARTICLE=$BASE_DIR/particle
 FIRMWARE_DUO=$BASE_DIR/redbearduo
 BRANCH="release/stable" # can
 BRANCH_DUO="duo"
-BINDIR=~/.po-util/bin            # be
 DFUBAUDRATE=14400       # changed in the "~/.po" file.
 CWD="$(pwd)" # Global Current Working Directory variable
 MODEM="$(ls -1 /dev/cu.* | grep "usbmodem" | tail -1)"
