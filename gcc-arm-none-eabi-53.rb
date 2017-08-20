@@ -1,8 +1,3 @@
-# https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_3-2016q1/gccarmnoneeabi532016q120160330mactar.bz2
-
-
-# require 'formula'
-
 class GccArmNoneEabi53 < Formula
   homepage 'https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads'
   version '20160330'
