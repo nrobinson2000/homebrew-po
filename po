@@ -135,7 +135,7 @@ find_objects() #Consolidated function
                 else
                     if [ "$DIRECTORY" == "." ] && [ -f "$CWD/main.cpp" ];
                     then
-                        cd "$CWD/.."
+                        cd "$CWD/.." || exit
                         DEVICESFILE="$(pwd)/devices.txt"
                         FIRMWAREDIR="$CWD"
                         FIRMWAREBIN="$(pwd)/bin/firmware.bin"
@@ -359,25 +359,28 @@ ota() # device firmware
   if [ "$1" == "--multi" ] || [ "$1" == "-m" ] || [ "$1" == "-ota" ];
   then
     DEVICEWARNING="true"
-    if [ "$FINDDEVICESFAIL" == "true" ];
+    if [ "$FINDDEVICESFAIL" == "true" ] || [[ -z "$DEVICES" ]];
     then
-      cd "$CWD"
+      cd "$CWD" || exit
       echo "" > devices.txt
       red_echo "Please list your devices in devices.txt"
-      sleep 3
-      exit
+      exit 1
     fi
     for DEVICE in $DEVICES ; do
       echo
       blue_echo "Flashing to device $DEVICE..."
-      particle flash "$DEVICE" "$FIRMWAREBIN" || ( red_echo "Your device must be online in order to flash firmware OTA." )
+      particle flash "$DEVICE" "$FIRMWAREBIN" || {
+         red_echo "Your device must be online in order to flash firmware OTA." && echo && exit 1
+       }
     done
     echo
     exit
   fi
   echo
   blue_echo "Flashing to device $1..."
-  particle flash "$1" "$FIRMWAREBIN" || ( red_echo "Try using \"particle flash\" if you are having issues." )
+  particle flash "$1" "$FIRMWAREBIN" || {
+    red_echo "Try using \"particle flash\" if you are having issues." && echo && exit 1
+  }
   echo
   exit
 }
@@ -442,8 +445,7 @@ getAddedLibs()
     exit
   fi
 
-  cd "$FIRMWAREDIR"
-  for i in $(ls -d */ 2>/dev/null); do echo ${i%%/}; done
+  for i in $FIRMWAREDIR/*/; do basename "$i"; done
 }
 
 getLibURL()
@@ -463,7 +465,7 @@ else
   LIB_QUERY="$2"
 fi
 
-    if (ls -1 "$LIBRARY" | grep -Fx "$LIB_QUERY") &> /dev/null ;
+    if [[ -d "$LIBRARY/$LIB_QUERY" ]];
     then
         echo
         blue_echo "Library $LIB_QUERY is already installed..."
@@ -492,7 +494,7 @@ fi
         if [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ];
         then
           echo
-          cd "$LIBRARY"
+          cd "$LIBRARY" || exit
           git clone "$LIBURL" "$LIB_QUERY"
           echo
           blue_echo "Downloaded $LIB_QUERY from GitHub."
@@ -504,7 +506,7 @@ fi
 
       blue_echo "Attempting to download $LIB_QUERY using Particle Libraries 2.0..."
       echo
-      cd "$LIBRARY/.."
+      cd "$LIBRARY/.." || exit
       particle library copy "$LIB_QUERY" || ( echo && particle library search "$LIB_QUERY" && echo && return 1 )
       echo
     fi
@@ -514,11 +516,8 @@ fi
 
 addLib()
 {
-
-  if (ls -1 "$LIBRARY" | grep "$LIB_NAME") &> /dev/null ; # Try to automatically get library if not found
+  if [[ ! -d "$LIBRARY/$LIB_NAME" ]]; # Try to automatically get library if not found
   then
-    echo "FOUND LIBRARY!" &> /dev/null
-  else
     getLib "$LIB_NAME" || ( echo && exit)
   fi
 
@@ -693,7 +692,7 @@ chmod +x "$FIRMWAREDIR/../ci/travis.sh"
       fi
 
   echo "bin/*" > "$FIRMWAREDIR/../.gitignore"
-  cd "$FIRMWAREDIR/.."
+  cd "$FIRMWAREDIR/.." || exit
   git init &> /dev/null
 
       echo
@@ -738,8 +737,12 @@ BRANCH="release/stable" # can
 BRANCH_DUO="duo"
 DFUBAUDRATE=14400       # changed in the "~/.po" file.
 CWD="$(pwd)" # Global Current Working Directory variable
-MODEM="$(ls -1 /dev/cu.* | grep "usbmodem" | tail -1)"
-MODEM_DUO="$(ls -1 /dev/* | grep "usbmodem" | tail -1)"
+
+for modem in /dev/cu.usbmodem*
+do
+  MODEM="$modem"
+  MODEM_DUO="$modem"
+done
 
 if [ "$1" == "config" ];
 then
@@ -820,11 +823,9 @@ then
     mkdir -p "$LIBRARY"
   fi
 
-  if [ -f "$LIBRARY/../project.properties" ]; # Structure library directory
+  if [ ! -f "$LIBRARY/../project.properties" ]; # Structure library directory
   then
-    echo "Exists!" > /dev/null
-  else
-    cd "$LIBRARY/.."
+    cd "$LIBRARY/.." || exit
     echo "name=particle-lib" > "project.properties"
   fi
 
@@ -866,7 +867,7 @@ then
     # Install particle-cli
     echo
     blue_echo "Installing particle-cli..."
-    sudo npm install -g --unsafe-perm node-pre-gyp npm serialport particle-cli
+    sudo npm install -g --unsafe-perm npm particle-cli
 
     # Tracking
     SYSTEM_IP="$(curl -sS ipecho.net/plain)"
@@ -938,7 +939,7 @@ Found the following Particle Devices:
 
 RAW_LOG="$(system_profiler SPUSBDataType)"
 
-  for device in $(ls -1 /dev/cu.* | grep "usbmodem");
+  for device in /dev/cu.usbmodem*;
   do
     LOCATION=$(echo "$device" | tail -c +17)
     LOCATION=${LOCATION%?}
@@ -1049,19 +1050,19 @@ then
         DIRWARNING="true"
         find_objects "$3"
 
-        for file in $(cd $FIRMWAREDIR && ls -d1 */ 2>/dev/null);
+        for file in $FIRMWAREDIR/*/;
         do
-            file_base="${file%/}"
+            file_base="$(basename $file)"
 
             if [ "$4" == "-f" ];
             then
-              rm -rf "$FIRMWAREDIR/$file_base" &> /dev/null
+              rm -rf "${FIRMWAREDIR:?}/$file_base" &> /dev/null
               rmHeaders "$file_base"
 
             else
-            if (ls -1 "$LIBRARY" | grep "$file_base") &> /dev/null ;
+            if [[ -d "$LIBRARY/$file_base" ]];
             then
-                rm -rf "$FIRMWAREDIR/$file_base" &> /dev/null # Transition
+                rm -rf "${FIRMWAREDIR:?}/$file_base" &> /dev/null # Transition
                 rm "$FIRMWAREDIR/$file_base.h" &> /dev/null   # to new
                 rm "$FIRMWAREDIR/$file_base.cpp" &> /dev/null # system
                 rmHeaders "$file_base"
@@ -1079,7 +1080,7 @@ then
     then
         DIRWARNING="true"
         find_objects "$3"
-        cd "$LIBRARY"
+        cd "$LIBRARY" || exit
 
         while read i ## Install and add required libs from libs.txt
         do
@@ -1094,7 +1095,7 @@ then
 
     if [ "$2" == "get" ] || [ "$2" == "install" ]; # Download a library with git OR Install from libs.txt
     then
-        cd "$LIBRARY"
+        cd "$LIBRARY" || exit
 
         if [ "$3" == "" ]; # Install from libs.txt
         then
@@ -1146,13 +1147,11 @@ then
     DIRWARNING="true"
     find_objects "$3"
 
-    for file in $(ls -1 $FIRMWAREDIR);
+    for file in $FIRMWAREDIR*;
     do
     file_base="${file%.*}"
-      if (ls -1 "$LIBRARY" | grep "$file_base") &> /dev/null ;
+      if [[ ! -d "$LIBRARY/$file_base" ]];
       then
-      echo " " > /dev/null
-      else
         if [ "$file_base" != "examples" ];
         then
           mkdir -p "$LIBRARY/$file_base"
@@ -1231,7 +1230,7 @@ then
 
       rm "$FIRMWAREDIR/$3.cpp" &> /dev/null # Transition
       rm "$FIRMWAREDIR/$3.h" &> /dev/null   # to new
-      rm -rf "$FIRMWAREDIR/$3" &> /dev/null # system
+      rm -rf "${FIRMWAREDIR:?}/$3" &> /dev/null # system
 
       grep -v "$3" "$FIRMWAREDIR/../libs.txt" > "$FIRMWAREDIR/../libs-temp.txt"
       rm "$FIRMWAREDIR/../libs.txt"
@@ -1256,7 +1255,7 @@ then
 
         rm "$FIRMWAREDIR/$3.cpp" &> /dev/null # Transition
         rm "$FIRMWAREDIR/$3.h" &> /dev/null   # to new
-        rm -rf "$FIRMWAREDIR/$3" &> /dev/null # system
+        rm -rf "${FIRMWAREDIR:?}/$3" &> /dev/null # system
 
         rmHeaders "$3"
         echo
@@ -1327,9 +1326,9 @@ then
   green_echo "Checking for updates for libraries installed using git..."
   echo
 
-  for OUTPUT in $(ls -1 "$LIBRARY")
+  for OUTPUT in $LIBRARY*;
   do
-  	cd "$LIBRARY/$OUTPUT"
+  	cd "$LIBRARY/$OUTPUT" || exit
 
     if [ ! -z "$(ls $LIBRARY/$OUTPUT/.git/ 2>/dev/null )" ]; # Only do git pull if it is a repository
     then
@@ -1346,9 +1345,9 @@ then
   echo
   blue_echo "Listing installed libraries that are cloneable..."
   echo
-  for OUTPUT in $(ls -1 "$LIBRARY")
+  for OUTPUT in $LIBRARY*;
   do
-  	cd "$LIBRARY/$OUTPUT"
+  	cd "$LIBRARY/$OUTPUT" || exit
     if [ -d "$LIBRARY/$OUTPUT/.git" ]; # Only if it is a repository
     then
       LIB_URL="$( cd $LIBRARY/$OUTPUT && git config --get remote.origin.url )"
@@ -1363,14 +1362,21 @@ if [ "$2" == "view-headers" ]; # See all headers in included libs
 then
 DIRWARNING="true"
 find_objects "$3"
-  for OUTPUT in $(ls -1d $FIRMWAREDIR/*/)
+  for OUTPUT in $FIRMWAREDIR/*/
   do
     echo
     blue_echo "$OUTPUT"
-    for HEADER in $(ls -1 $OUTPUT)
+    for HEADER in $OUTPUT*
     do
+      HEADER="$(basename $HEADER)"
+
+      if [[ "$HEADER" == "$(basename $OUTPUT)" ]]; then
+        continue
+      fi
+
       echo
       green_echo "$HEADER"
+
       for INCLUDE in $(grep -w "#include" "$OUTPUT$HEADER")
       do
         if [ "$INCLUDE" != "#include" ];
@@ -1527,9 +1533,8 @@ rm "$FIRMWAREDIR/../libs.temp2.txt"
 while read i ## create libs.txt
 do
   LIB_NAME="$i"
-  if (ls -1 "$LIBRARY" | grep "$LIB_NAME") &> /dev/null ;
+  if [[ -d "$LIBRARY/$LIB_NAME" ]];
   then
-
 
     if [ -d "$LIBRARY/$LIB_NAME/.git" ]; # Only if it is a repository
     then
