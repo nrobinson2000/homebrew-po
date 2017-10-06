@@ -14,5 +14,3 @@ script:
   - po P1 build
   - po core clean
   - po core build
-  - po duo clean
-  - po duo build
