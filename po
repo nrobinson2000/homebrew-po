@@ -210,7 +210,7 @@ build_message()
 {
     echo
     cd "$FIRMWAREDIR"/.. || exit
-    BINARYDIR="$(pwd)/bin"
+    BINARYDIR="$(PWD)/bin"
     green_echo "Binary saved to $BINARYDIR/firmware.bin"
     echo
     exit
@@ -250,7 +250,7 @@ fi
 
     if [ "$DEVICE_TYPE" == "duo" ];
     then
-        if [ "$MODEM_DUO" != "" ];
+        if [ -e $MODEM_DUO ];
         then
             MODEM="$MODEM_DUO"
         else
@@ -262,7 +262,7 @@ fi
             exit
         fi
     else
-        if [ "$MODEM" != "" ];
+        if [ -e $MODEM ];
         then
             MODEM="$MODEM"
         else
@@ -303,6 +303,20 @@ common_commands() #List common commands
     blue_echo "Common commands include:
     build, flash, clean, ota, dfu, serial, init, config, setup, library"
     echo
+}
+
+printSizes()
+{
+  FLASH="$(( $1 + $2 ))"
+  FLASHTOTAL="110592"
+  FLASHPERCENT=$(bc -l <<< "scale = 4; $FLASH / $FLASHTOTAL * 100")
+
+  RAM="$(( $3 + $2 ))"
+  RAMTOTAL="20480"
+  RAMPERCENT=$(bc -l <<< "scale = 4; $RAM / $RAMTOTAL * 100")
+  echo
+  echo "$(tput setaf 6)$(tput bold)Flash Used:$(tput sgr0) $FLASH / $FLASHTOTAL    ${FLASHPERCENT%??} %"
+  echo "$(tput setaf 6)$(tput bold)RAM Used:  $(tput sgr0) $RAM / $RAMTOTAL     ${RAMPERCENT%??} %"
 }
 
 build_firmware()
@@ -1816,6 +1830,8 @@ then
       exit
     fi
     build_firmware || exit
+    SIZES=$(arm-none-eabi-size "$FIRMWAREDIR/../bin/firmware.elf" | tail -1)
+    printSizes $SIZES
     build_message
 fi
 
