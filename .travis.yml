@@ -1,5 +1,6 @@
 os: osx
 language: bash
+rvm: 2.3
 install:
   - brew tap nrobinson2000/po
   - brew install po
