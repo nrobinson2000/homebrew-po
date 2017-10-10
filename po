@@ -354,13 +354,13 @@ echo "STORED_FIRMWAREDIR=$FIRMWAREDIR" >> "$PARAMETERS"
 fi
 
 if [[ "$DEVICE_TYPE_CHANGED" ]] && [[ "$FIRMWAREDIR_CHANGED" ]]; then
-  blue_echo "Detected change of platform and project. Cleaning before attepmting build..."
+  blue_echo "Detected change of platform and project. Cleaning before attempting build..."
   cleanFirmware
 elif [[ "$DEVICE_TYPE_CHANGED" ]]; then
-  blue_echo "Detected change of platform. Cleaning before attepmting build..."
+  blue_echo "Detected change of platform. Cleaning before attempting build..."
   cleanFirmware
 elif [[ "$FIRMWAREDIR_CHANGED" ]]; then
-  blue_echo "Detected change of project. Cleaning before attepmting build..."
+  blue_echo "Detected change of project. Cleaning before attempting build..."
   cleanFirmware
 fi
 }
