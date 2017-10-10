@@ -305,6 +305,66 @@ common_commands() #List common commands
     echo
 }
 
+cleanFirmware()
+{
+  if [ "$DEVICE_TYPE" == "duo" ];
+  then
+    cd "$FIRMWARE_DUO"/firmware || exit
+  else
+    cd "$FIRMWARE_PARTICLE"/firmware || exit
+  fi
+
+  if [ "$DEVICE_TYPE" == "pi" ];
+  then
+    switch_branch "feature/raspberry-pi"  &> /dev/null
+  elif [ "$DEVICE_TYPE" == "duo" ];
+  then
+    switch_branch "$BRANCH_DUO" &> /dev/null
+  else
+    switch_branch &> /dev/null
+  fi
+
+    git stash &> /dev/null
+    echo
+    if [ "$DEVICE_TYPE" == "pi" ];
+    then
+      make clean -s 2>&1 /dev/null
+    else
+      make clean -s PLATFORM="$DEVICE_TYPE"  2>&1 /dev/null
+    fi
+
+    if [ "$FIRMWAREDIR/../bin" != "$HOME/bin" ];
+    then
+      rm -rf "$FIRMWAREDIR/../bin"
+    fi
+    blue_echo "Sucessfully cleaned."
+    echo
+}
+
+store_build_parameters() # Keep track of $DEVICE_TYPE and $FIRMWAREDIR
+{
+PARAMETERS="$HOME/.po-util/buildParameters"
+[[ -f "$PARAMETERS" ]] && . "$PARAMETERS"
+[[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] && DEVICE_TYPE_CHANGED="true"
+[[ "$STORED_FIRMWAREDIR" != "$FIRMWAREDIR" ]] && FIRMWAREDIR_CHANGED="true"
+
+if [[ "$STORED_DEVICE_TYPE" != "$DEVICE_TYPE" ]] || [[ "$STORED_FIRMWAREDIR" != "$FIRMWAREDIR" ]]; then
+echo "STORED_DEVICE_TYPE=$DEVICE_TYPE" > "$PARAMETERS"
+echo "STORED_FIRMWAREDIR=$FIRMWAREDIR" >> "$PARAMETERS"
+fi
+
+if [[ "$DEVICE_TYPE_CHANGED" ]] && [[ "$FIRMWAREDIR_CHANGED" ]]; then
+  blue_echo "Detected change of platform and project. Cleaning before attepmting build..."
+  cleanFirmware
+elif [[ "$DEVICE_TYPE_CHANGED" ]]; then
+  blue_echo "Detected change of platform. Cleaning before attepmting build..."
+  cleanFirmware
+elif [[ "$FIRMWAREDIR_CHANGED" ]]; then
+  blue_echo "Detected change of project. Cleaning before attepmting build..."
+  cleanFirmware
+fi
+}
+
 printSizes()
 {
   FLASH="$(( $1 + $2 ))"
@@ -321,6 +381,8 @@ printSizes()
 
 build_firmware()
 {
+    store_build_parameters
+
     print_logo "Building firmware for $DEVICE_TYPE..."
 
   if [ "$DEVICE_TYPE" == "duo" ];
@@ -333,6 +395,8 @@ build_firmware()
 
 build_pi()
 {
+  store_build_parameters
+
   if hash docker 2>/dev/null;
   then
     if docker run --rm -i -v $FIRMWARE_PARTICLE/firmware:/firmware -v $FIRMWAREDIR:/input -v $FIRMWAREDIR/../bin:/output particle/buildpack-raspberrypi 2> echo;
@@ -947,6 +1011,19 @@ fi
 # List devices aviable over serial
 if [ "$1" == "list" ] || [ "$1" == "ls" ];
 then
+
+for device in /dev/cu.usbmodem*;
+do
+if [[ ! -e $device ]]; then
+  echo
+  red_echo "No devices found!"
+  echo
+  blue_echo "Your device(s) must be connected by USB."
+  echo
+  exit
+fi
+done
+
   blue_echo "
 Found the following Particle Devices:
 "
@@ -955,6 +1032,8 @@ RAW_LOG="$(system_profiler SPUSBDataType)"
 
   for device in /dev/cu.usbmodem*;
   do
+    if [[ -e $device ]];
+    then
     LOCATION=$(echo "$device" | tail -c +17)
     LOCATION=${LOCATION%?}
     LOCNUM=$(echo "$RAW_LOG" | sed -n "/$LOCATION/=")
@@ -963,6 +1042,7 @@ RAW_LOG="$(system_profiler SPUSBDataType)"
     PLATFORM=$(echo $PLATFORM | xargs)
     echo "$(tput bold)$(tput setaf 3)$PLATFORM$(tput sgr0) $device
     "
+  fi
   done
   exit
 fi
