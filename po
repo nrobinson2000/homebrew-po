@@ -367,12 +367,18 @@ fi
 
 printSizes()
 {
-  FLASH="$(( $1 + $2 ))"
+if [[ "$DEVICE_TYPE" == "core" ]]; then
   FLASHTOTAL="110592"
+  RAMTOTAL="20480"
+else
+  FLASHTOTAL="125000"
+  RAMTOTAL="60000"
+fi
+
+  FLASH="$(( $1 + $2 ))"
   FLASHPERCENT=$(bc -l <<< "scale = 4; $FLASH / $FLASHTOTAL * 100")
 
   RAM="$(( $3 + $2 ))"
-  RAMTOTAL="20480"
   RAMPERCENT=$(bc -l <<< "scale = 4; $RAM / $RAMTOTAL * 100")
   echo
   echo "$(tput setaf 6)$(tput bold)Flash Used:$(tput sgr0) $FLASH / $FLASHTOTAL    ${FLASHPERCENT%??} %"
