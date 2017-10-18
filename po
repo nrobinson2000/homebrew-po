@@ -136,9 +136,9 @@ find_objects() #Consolidated function
                     if [ "$DIRECTORY" == "." ] && [ -f "$CWD/main.cpp" ];
                     then
                         cd "$CWD/.." || exit
-                        DEVICESFILE="$(pwd)/devices.txt"
+                        DEVICESFILE="$PWD/devices.txt"
                         FIRMWAREDIR="$CWD"
-                        FIRMWAREBIN="$(pwd)/bin/firmware.bin"
+                        FIRMWAREBIN="$PWD/bin/firmware.bin"
                     else
                         echo
                         red_echo "Firmware not found!"
@@ -210,7 +210,7 @@ build_message()
 {
     echo
     cd "$FIRMWAREDIR"/.. || exit
-    BINARYDIR="$(PWD)/bin"
+    BINARYDIR="$PWD/bin"
     green_echo "Binary saved to $BINARYDIR/firmware.bin"
     echo
     exit
@@ -250,7 +250,7 @@ fi
 
     if [ "$DEVICE_TYPE" == "duo" ];
     then
-        if [ -e $MODEM_DUO ];
+        if [ -e "$MODEM_DUO" ];
         then
             MODEM="$MODEM_DUO"
         else
@@ -262,7 +262,7 @@ fi
             exit
         fi
     else
-        if [ -e $MODEM ];
+        if [ -e "$MODEM" ];
         then
             MODEM="$MODEM"
         else
@@ -275,7 +275,7 @@ fi
         fi
     fi
 
-    if [ "$MODEM" ];
+    if [ -e "$MODEM" ];
     then
         stty -f "$MODEM" "$DFUBAUDRATE" > /dev/null
     fi
@@ -820,7 +820,7 @@ FIRMWARE_DUO=$BASE_DIR/redbearduo
 BRANCH="release/stable" # can
 BRANCH_DUO="duo"
 DFUBAUDRATE=14400       # changed in the "~/.po" file.
-CWD="$(pwd)" # Global Current Working Directory variable
+CWD="$PWD" # Global Current Working Directory variable
 
 for modem in /dev/cu.usbmodem*
 do
@@ -1003,7 +1003,7 @@ fi
 # Open serial monitor for device
 if [ "$1" == "serial" ];
 then
-    if [ "$MODEM" == "" ]; # Don't run screen if device is not connected
+    if [ ! -e "$MODEM" ]; # Don't run screen if device is not connected
     then
         red_echo "No device connected!"
     else
@@ -1061,6 +1061,7 @@ then
 fi
 
 # Get device out of DFU mode
+#TODO
 if [ "$1" == "dfu-close" ];
 then
     dfu-util -d 2b04:D006 -a 0 -i 0 -s 0x080A0000:leave -D /dev/null &> /dev/null
