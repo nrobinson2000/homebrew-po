@@ -33,7 +33,7 @@ class Po < Formula
   In order to complete the installation of po-util,
   you must run 'po install'.
 
-  For Raspberry Pi support, you must have docker installed.
+  For Raspberry Pi support you must have docker installed.
   EOS
   end
 end
