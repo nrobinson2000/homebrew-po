@@ -388,37 +388,35 @@ fi
 build_firmware()
 {
     store_build_parameters
-
     print_logo "Building firmware for $DEVICE_TYPE..."
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
     make all -s -C "$FIRMWARE_DUO/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
   else
-    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
-  fi
-}
 
-build_pi()
-{
-  store_build_parameters
-
-  if hash docker 2>/dev/null;
-  then
-    if docker run --rm -i -v $FIRMWARE_PARTICLE/firmware:/firmware -v $FIRMWAREDIR:/input -v $FIRMWAREDIR/../bin:/output particle/buildpack-raspberrypi 2> echo;
+    if [ "$DEVICE_TYPE" == "pi" ];
     then
-      echo
-      blue_echo "Successfully built firmware for Raspberry Pi"
-    else
-      echo
-      red_echo "Build failed."
-      echo
-      exit 1
+        if hash docker 2>/dev/null;
+        then
+          if docker run --rm -i -v $FIRMWARE_PI/firmware:/firmware -v $FIRMWAREDIR:/input -v $FIRMWAREDIR/../bin:/output particle/buildpack-raspberrypi 2> echo;
+          then
+            echo
+            blue_echo "Successfully built firmware for Raspberry Pi"
+          else
+            echo
+            red_echo "Build failed."
+            echo
+            exit 1
+          fi
+        else
+          red_echo "Docker not found. Please install docker to build firmware for Raspberry Pi"
+          echo
+          exit 1
+        fi
+      else
+    make all -s -C "$FIRMWARE_PARTICLE/firmware/main" APPDIR="$FIRMWAREDIR" TARGET_DIR="$FIRMWAREDIR/../bin" PLATFORM="$DEVICE_TYPE"
     fi
-  else
-    red_echo "Docker not found.  Please install docker to build firmware for Raspberry Pi"
-    echo
-    exit
   fi
 }
 
@@ -481,13 +479,16 @@ config()
   BASE_DIR=~/.po-util/src
   FIRMWARE_PARTICLE=$BASE_DIR/particle
   FIRMWARE_DUO=$BASE_DIR/redbearduo
+  FIRMWARE_PI=$BASE_DIR/pi
   BRANCH="release/stable"
   BRANCH_DUO="duo"
+  BRANCH_PI="feature/raspberry-pi"
   MODEM_DUO=$MODEM_DUO
 
   echo BASE_DIR="$BASE_DIR" >> $SETTINGS
   echo FIRMWARE_PARTICLE="$FIRMWARE_PARTICLE" >> $SETTINGS
   echo FIRMWARE_DUO="$FIRMWARE_DUO" >> $SETTINGS
+  echo FIRMWARE_PI="$FIRMWARE_PI" >> $SETTINGS
   echo "export PARTICLE_DEVELOP=1" >> $SETTINGS
 
   # Particle
@@ -814,12 +815,14 @@ fi
 
 # Configuration file is created at "~/.po-util/config"
 SETTINGS=~/.po-util/config
-BASE_DIR=~/.po-util/src  # These
+BASE_DIR=~/.po-util/src
 FIRMWARE_PARTICLE=$BASE_DIR/particle
 FIRMWARE_DUO=$BASE_DIR/redbearduo
-BRANCH="release/stable" # can
+FIRMWARE_PI=$BASE_DIR/pi
+BRANCH="release/stable"
 BRANCH_DUO="duo"
-DFUBAUDRATE=14400       # changed in the "~/.po" file.
+BRANCH_PI="feature/raspberry-pi"
+DFUBAUDRATE=14400
 CWD="$PWD" # Global Current Working Directory variable
 
 for modem in /dev/cu.usbmodem*
@@ -893,6 +896,8 @@ then
   [ -d "$FIRMWARE_PARTICLE" ] || mkdir -p "$FIRMWARE_PARTICLE"  # If FIRMWARE_PARTICLE does not exist, create it
   # create redbearduo dir
   [ -d "$FIRMWARE_DUO" ] || mkdir -p "$FIRMWARE_DUO"  # If FIRMWARE_DUO does not exist, create it
+  # create raspberry-pi dir
+  [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_DUO does not exist, create it
 
   # Enable bash completion
   grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
@@ -924,6 +929,12 @@ then
     echo
     blue_echo "Installing RedBear Duo firmware from Github..."
     git clone https://github.com/redbear/firmware.git
+
+    # clone Particle-Pi firmware repository
+  cd "$FIRMWARE_PI" || exit
+    echo
+    blue_echo "Installing Particle-Pi firmware from Github..."
+    git clone https://github.com/spark/firmware.git
 
     echo
 
@@ -996,7 +1007,7 @@ Please choose a device type next time :)"
   FOLDER="$2"
   fi
 
-initProject
+  initProject
 
 fi
 
@@ -1021,12 +1032,12 @@ then
 for device in /dev/cu.usbmodem*;
 do
 if [[ ! -e $device ]]; then
-  echo
-  red_echo "No devices found!"
-  echo
-  blue_echo "Your device(s) must be connected by USB."
-  echo
-  exit
+    echo
+    red_echo "No devices found!"
+    echo
+    blue_echo "Your device(s) must be connected by USB."
+    echo
+    exit
 fi
 done
 
@@ -1096,6 +1107,18 @@ then
         exit
     fi
 
+    if [ "$2" == "pi" ]; # update just pi firmware
+    then
+      echo
+      blue_echo "Updating Particle-Pi firmware..."
+      cd "$FIRMWARE_PI"/firmware || exit
+      git stash
+      switch_branch "$BRANCH_PI" &> /dev/null
+      git pull
+      echo
+      exit
+    fi
+
     #update both and everything else if not specified
 
     echo
@@ -1112,6 +1135,14 @@ then
     cd "$FIRMWARE_PARTICLE"/firmware || exit
     git stash
     switch_branch &> /dev/null
+    git pull
+
+    echo
+
+    blue_echo "Updating Particle-Pi firmware..."
+    cd "$FIRMWARE_PI"/firmware || exit
+    git stash
+    switch_branch "$BRANCH_PI" &> /dev/null
     git pull
 
     echo
@@ -1702,20 +1733,20 @@ then
 
   if [ "$DEVICE_TYPE" == "duo" ];
   then
-    cd "$FIRMWARE_DUO"/firmware || exit
-  else
-    cd "$FIRMWARE_PARTICLE"/firmware || exit
+    cd "$FIRMWARE_DUO/firmware" || exit
+    switch_branch $BRANCH_DUO &> /dev/null
   fi
 
   if [ "$DEVICE_TYPE" == "pi" ];
   then
+    cd "$FIRMWARE_PI/firmware" || exit
     switch_branch "feature/raspberry-pi"  &> /dev/null
-  elif [ "$DEVICE_TYPE" == "duo" ];
-  then
-    switch_branch "$BRANCH_DUO" &> /dev/null
+
   else
+    cd "$FIRMWARE_PARTICLE/firmware" || exit
     switch_branch &> /dev/null
   fi
+
 else
   echo
   if [ "$1" == "redbear" ] || [ "$1" == "bluz" ] || [ "$1" == "oak" ];
@@ -1910,12 +1941,6 @@ then
     exit
   fi
     echo
-    if [ "$DEVICE_TYPE" == "pi" ];
-    then
-      build_pi
-      echo
-      exit
-    fi
     build_firmware || exit
     SIZES=$(arm-none-eabi-size "$FIRMWAREDIR/../bin/firmware.elf" | tail -1)
     printSizes $SIZES
@@ -1932,7 +1957,7 @@ then
   fi
   if [ "$DEVICE_TYPE" == "pi" ];
   then
-    build_pi
+    build_firmware
     ota "-m"
     exit
   fi

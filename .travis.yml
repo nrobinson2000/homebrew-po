@@ -2,6 +2,7 @@ os: osx
 language: bash
 rvm: 2.3
 install:
+  - brew update
   - brew tap nrobinson2000/po
   - brew install po
   - ./config-expect.sh
