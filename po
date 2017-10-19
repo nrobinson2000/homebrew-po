@@ -849,7 +849,7 @@ then
   config
 fi
 
-# Import our overrides from the ~/.po file.
+# Import our overrides from the ~/.po-util/config file.
 source "$SETTINGS"
 
 if [ "$1" == "info" ];
@@ -891,13 +891,12 @@ then
 
   # create base dir
   [ -d "$BASE_DIR" ] || mkdir -p "$BASE_DIR"  # If BASE_DIR does not exist, create it
-
   # create Particle dir
   [ -d "$FIRMWARE_PARTICLE" ] || mkdir -p "$FIRMWARE_PARTICLE"  # If FIRMWARE_PARTICLE does not exist, create it
   # create redbearduo dir
   [ -d "$FIRMWARE_DUO" ] || mkdir -p "$FIRMWARE_DUO"  # If FIRMWARE_DUO does not exist, create it
   # create raspberry-pi dir
-  [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_DUO does not exist, create it
+  [ -d "$FIRMWARE_PI" ] || mkdir -p "$FIRMWARE_PI"  # If FIRMWARE_PI does not exist, create it
 
   # Enable bash completion
   grep "source /usr/local/etc/bash_completion.d/po" "$HOME/.profile" > /dev/null || echo "source /usr/local/etc/bash_completion.d/po" >> "$HOME/.profile"
@@ -959,11 +958,6 @@ then
     rm -f node-*.txt
     fi
 
-    # Install particle-cli
-    echo
-    blue_echo "Installing particle-cli..."
-    sudo npm install -g --unsafe-perm npm particle-cli
-
     # Tracking
     SYSTEM_IP="$(curl -sS ipecho.net/plain)"
     KERNEL="$(uname -s)"
@@ -975,6 +969,11 @@ then
     if [[ "$GIT_NAME" != "" ]] || [[ "$GIT_EMAIL" != "" ]]; then
       curl -sS "https://po-util-tracker.herokuapp.com/git/$GIT_NAME/$GIT_EMAIL/$BASH_VERSION@$SYSTEM_IP" > /dev/null &
     fi
+
+    # Install particle-cli
+    echo
+    blue_echo "Installing particle-cli..."
+    sudo npm install -g --unsafe-perm npm particle-cli
 
     green_echo "
     Thank you for installing po-util. Be sure to check out https://po-util.com
@@ -1083,6 +1082,10 @@ fi
 if [ "$1" == "update" ];
 then
 
+    SYSTEM_IP="$(curl -sS ipecho.net/plain)"
+    KERNEL="$(uname -s)"
+    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
+
     if [ "$2" == "duo" ]; # Update just duo firmware
     then
         echo
@@ -1119,10 +1122,8 @@ then
       exit
     fi
 
-    #update both and everything else if not specified
-
+    #update everything if not specified
     echo
-
     blue_echo "Updating RedBear DUO firmware..."
     cd "$FIRMWARE_DUO"/firmware || exit
     git stash
@@ -1130,7 +1131,6 @@ then
     git pull
 
     echo
-
     blue_echo "Updating Particle firmware..."
     cd "$FIRMWARE_PARTICLE"/firmware || exit
     git stash
@@ -1138,7 +1138,6 @@ then
     git pull
 
     echo
-
     blue_echo "Updating Particle-Pi firmware..."
     cd "$FIRMWARE_PI"/firmware || exit
     git stash
@@ -1156,10 +1155,6 @@ then
 
     rm -f ~/.po-util/doc/po-util-README.md
     curl -fsSLo ~/.po-util/doc/po-util-README.md https://raw.githubusercontent.com/nrobinson2000/po-util/master/po-util-README.md
-
-    SYSTEM_IP="$(curl -sS ipecho.net/plain)"
-    KERNEL="$(uname -s)"
-    curl -sS "https://po-util-tracker.herokuapp.com/update/$USER/$HOSTNAME@$KERNEL/$SYSTEM_IP" > /dev/null &
     echo
     exit
 fi
@@ -1825,7 +1820,7 @@ then
   echo
   blue_echo "Flashing $FIRMWAREBIN with dfu-util..."
   echo
-  dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN" || ( red_echo "Device not found." )
+  dfu-util -d "$DFU_ADDRESS1" -a 0 -i 0 -s "$DFU_ADDRESS2":leave -D "$FIRMWAREBIN" || ( echo && red_echo "Device not found." && echo && exit 1 )
   echo
   blue_echo "Firmware successfully flashed to $DEVICE_TYPE on $MODEM"
   echo
