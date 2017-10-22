@@ -231,7 +231,7 @@ fi
 if [ "$1" == "-d" ] || [ "$1" == "--device" ];
 then
 
-  if stty -f "$2" > /dev/null 2>&1; # Check if serial port is avaliable
+  if [[ -e "$2" ]]; # Check if serial port is avaliable
   then
   blue_echo "
 Placing device $2 into DFU mode...
@@ -929,7 +929,7 @@ then
     blue_echo "Installing RedBear Duo firmware from Github..."
     git clone https://github.com/redbear/firmware.git
 
-    # clone Particle-Pi firmware repository
+  # clone Particle-Pi firmware repository
   cd "$FIRMWARE_PI" || exit
     echo
     blue_echo "Installing Particle-Pi firmware from Github..."
