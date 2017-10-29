@@ -973,7 +973,7 @@ then
     # Install particle-cli
     echo
     blue_echo "Installing particle-cli..."
-    sudo npm install -g --unsafe-perm npm particle-cli
+    sudo npm install -g --unsafe-perm node-pre-gyp npm particle-cli
 
     green_echo "
     Thank you for installing po-util. Be sure to check out https://po-util.com
