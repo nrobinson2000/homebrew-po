@@ -786,6 +786,40 @@ chmod +x "$FIRMWAREDIR/../ci/travis.sh"
       exit
 }
 
+getLatestNodeVersion()
+{
+  curl -Ss https://nodejs.org/dist/ > node-result.txt
+  grep "<a href=\"v" "node-result.txt" > node-new.txt
+  tail -1 node-new.txt > node-oneline.txt
+  sed -n 's/.*\"\(.*.\)\".*/\1/p' node-oneline.txt > node-version.txt
+  NODEVERSION="$(cat node-version.txt)"
+  NODEVERSION="${NODEVERSION%?}"
+  INSTALLVERSION="node-$NODEVERSION"
+  rm node-*.txt
+}
+
+getNodeLTSVersion()
+{
+  NODEVERSION=$(curl -sL https://nodejs.org/en/ | grep " LTS" | tail -1 | xargs)
+  NODEVERSION=${NODEVERSION%% *}
+
+  if [[ ${#NODEVERSION} -ge 7 ]] || [[ ${#NODEVERSION} -le 4 ]] ; then
+    NODEVERSION="8.9.1" # Fallback
+  fi
+
+  NODEVERSION="v$NODEVERSION"
+  INSTALLVERSION="node-$NODEVERSION"
+
+}
+
+installNodeVersion()
+{
+  blue_echo "Installing Node.js version $NODEVERSION..."
+  curl -fsSLO "https://nodejs.org/dist/$NODEVERSION/$INSTALLVERSION.pkg"
+  sudo installer -pkg node-*.pkg -target /
+  rm -rf node-*.pkg
+}
+
 # End of helper functions
 
 if [ "$1" == "" ] || [ "$1" == "help" ]; # Print help
@@ -942,20 +976,17 @@ then
     brew update
     brew install gcc-arm-none-eabi-53 dfu-util
 
-    # Install Node.js
-    NODEVERSION="v6.9.1"
-    INSTALLVERSION="node-$NODEVERSION"
+    #getLatestNodeVersion
+
+    getNodeLTSVersion # Automatically get the latest LTS release of Node.js
+
     if [ "$(node -v)" == "$NODEVERSION" ];
     then
-    echo
-    blue_echo "Node.js version $NODEVERSION is already installed."
+      echo
+      blue_echo "Node.js version $NODEVERSION is already installed."
     else
-    echo
-    blue_echo "Installing Node.js version $NODEVERSION..."
-    curl -fsSLO "https://nodejs.org/dist/$NODEVERSION/$INSTALLVERSION.pkg"
-    sudo installer -pkg node-*.pkg -target /
-    rm -rf node-*.pkg
-    rm -f node-*.txt
+      echo
+      installNodeVersion
     fi
 
     # Tracking
