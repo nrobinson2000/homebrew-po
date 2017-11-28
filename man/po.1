@@ -88,7 +88,21 @@ NOTE: Using -m or --multi depends on a
 file inside of your project. The file must contain the names of your devices, one per line, and the devices must all be of the same type.
 
 .TP
-.B serial
+.B serial open
+
+Put a device into listening mode.
+
+You can specify a device with
+.B -d
+
+Example:
+
+.B po
+serial open -d /dev/cu.usbmodem1441
+
+
+.TP
+.B serial monitor
 Monitor a device's serial output using
 .B screen
 (Close with CRTL-A +D)
@@ -116,7 +130,7 @@ dfu
 
 
 .TP
-.B dfu-open
+.B dfu open
 Put a device into DFU mode.
 
 You can specify a device with
@@ -125,11 +139,11 @@ You can specify a device with
 Example:
 
 .B po
-dfu-open -d /dev/cu.usbmodem1441
+dfu open -d /dev/cu.usbmodem1441
 
 
 .TP
-.B dfu-close
+.B dfu close
 Get device out of DFU mode.
 
 .TP

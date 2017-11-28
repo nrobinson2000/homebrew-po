@@ -45,8 +45,7 @@ _po-util()
       prepreprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
 
-    primary="photon electron P1 pi duo core help setup-atom config info install init serial list ls
-    dfu-open dfu-close update library lib"
+    primary="photon electron P1 pi duo core help setup-atom config info install init serial dfu list ls update library lib"
 
     device="init dfu upgrade patch ota build clean flash"
 
@@ -56,6 +55,10 @@ _po-util()
     package pack export help update refresh source src view-headers examples ex"
 
     examples="ls list load copy"
+
+    serial="open monitor"
+
+    dfu="close open"
 
     if [[ "$COMP_CWORD" == 1 ]]; then
       COMPREPLY=($(compgen -W "$primary" -- "$cur"))
@@ -79,6 +82,10 @@ _po-util()
 
     elif [[ $prev == "photon" ]] || [[ $prev == "electron" ]] || [[ $prev == "P1" ]] || [[ $prev == "pi" ]] || [[ $prev == "duo" ]] || [[ $prev == "core" ]]; then
       COMPREPLY=( $(compgen -W "$device" -- $cur) )
+      return 0
+
+    elif [[ $prev == "dfu" ]] && [[ "$COMP_CWORD" == 2 ]]; then
+      COMPREPLY=( $(compgen -W "$dfu" -- $cur) )
       return 0
 
    elif [[ $prev == "build" ]] || [[ $prev == "flash" ]] || [[ $prev == "clean" ]] || [[ $prev == "dfu" ]] || [[ $prev == "ota" ]]; then
@@ -117,7 +124,11 @@ _po-util()
       COMPREPLY=( $(compgen -W "$(ls $HOME/.po-util/lib)" -- $cur) )
       return 0
 
-    elif [[ $prev == "dfu-open" ]] && [[ "$COMP_CWORD" == 2 ]]; then
+    elif [[ $prev == "serial" ]]; then
+      COMPREPLY=( $(compgen -W "$serial" -- $cur) )
+      return 0
+
+    elif [[ $prev == "open" ]] && [[ "$COMP_CWORD" == 3 ]]; then
       COMPREPLY=( $(compgen -W "-d" -- $cur) )
       return 0
 
