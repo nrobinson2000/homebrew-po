@@ -964,6 +964,18 @@ export NVM_DIR="$HOME/.nvm"
 if [ "$1" == "install" ]; # Install
 then
 
+  # Don't let po-util install under root
+  if [[ "$USER" == "root" ]]; then
+    red_echo "
+Please do not install po-util using sudo or root.
+Install it using your preferred account on your system.
+
+You will be prompted for your password to use sudo
+during the installation when appropriate.
+"
+  exit
+  fi
+
   # create doc dir
   [ -d "$HOME/.po-util/doc" ] || mkdir -p "$HOME/.po-util/doc"  # If BASE_DIR does not exist, create it
 
