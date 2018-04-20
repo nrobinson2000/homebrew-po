@@ -17,7 +17,7 @@ class Po < Formula
   homepage 'https://po-util.com'
   head 'https://github.com/nrobinson2000/homebrew-po', :using => :git
   url 'https://github.com/nrobinson2000/po/archive/0.3.6.tar.gz'
-  sha256 '725ff03c38d7b70614d9df573f463460b472145a14f8306fe5d9abbb9799a8df'
+  sha256 '65e17317b56d2fe1b457d1d6bf12698c58552417f4ebc20b4ddc2f0cf544048b'
 
   def install
     bin.install 'bin/po'
