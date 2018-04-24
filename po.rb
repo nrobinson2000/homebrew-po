@@ -46,9 +46,8 @@ class Po < Formula
     # The installed folder is not in the path, so use the entire path to any
     # executables being tested: `system "#{bin}/program", "do", "something"`.
 
-    system "po", "config", "release/v0.6.3", "duo", "false"
-    system "po", "info"
-    system "po", "install"
+    system "#{bin}/po", "config", "release/v0.6.3", "duo", "false"
+    system "#{bin}/po", "info"
+    system "#{bin}/po", "install"
   end
-
 end
