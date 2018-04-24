@@ -24,6 +24,5 @@ class Po < Formula
   test do
     system "#{bin}/po", "config", "release/v0.6.3", "duo", "false"
     system "#{bin}/po", "info"
-    system "#{bin}/po", "install"
   end
 end
